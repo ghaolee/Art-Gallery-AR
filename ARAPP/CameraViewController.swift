@@ -93,19 +93,40 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         }
     }
     
-    func placeBlockOnPlaneAt(_ hit: ARHitTestResult) {
-        let box = createBox()
-        position(node: box, atHit: hit)
+    func placeBlockOnPlaneAt(_ hitResult: ARHitTestResult) {
+//        let box = createBox()
+//        position(node: box, atHit: hit)
         
-        sceneView?.scene.rootNode.addChildNode(box)
+        // 1.
+        let planeGeometry = SCNPlane(width: 0.2, height: 0.35)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIImage(named: "arewecool")
+        planeGeometry.materials = [material]
+
+        // 2.
+        let paintingNode = SCNNode(geometry: planeGeometry)
+        paintingNode.transform = SCNMatrix4(hitResult.anchor!.transform)
+        paintingNode.eulerAngles = SCNVector3(paintingNode.eulerAngles.x + (-Float.pi / 2), paintingNode.eulerAngles.y, paintingNode.eulerAngles.z)
+        paintingNode.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
+
+        
+        
+        //sceneView?.scene.rootNode.addChildNode(box)
+        sceneView.scene.rootNode.addChildNode(paintingNode)
     }
     
     private func createBox() -> SCNNode {
-        let box = SCNBox(width: 0.15, height: 0.20, length: 0.02, chamferRadius: 0.02)
-        let boxNode = SCNNode(geometry: box)
-        boxNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
         
-        return boxNode
+        let image = UIImage(named: "arewecool")
+        let node = SCNNode(geometry: SCNPlane(width: 0.5, height: 0.5))
+        
+        node.geometry?.firstMaterial?.diffuse.contents = image
+        
+//        let box = SCNBox(width: 0.15, height: 0.20, length: 0.02, chamferRadius: 0.02)
+//        let boxNode = SCNNode(geometry: box)
+//        boxNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
+        
+        return node
     }
     
     private func position(node: SCNNode, atHit hit: ARHitTestResult) {
