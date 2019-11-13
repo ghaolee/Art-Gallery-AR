@@ -16,6 +16,11 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     
     @IBOutlet weak var sceneView: ARSCNView!
     
+    var maxPosters: Int = 2;
+    var numPosters: Int = 0;
+    var canPlacePoster: Bool = true
+    var posterNodeRefereneces = NSPointerArray.weakObjects()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -33,9 +38,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         sceneView.delegate = self
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
 
+        // Add tap gesture
+        // TODO: you can tap on poster to put anohter poster on it!
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.didTapScene(withGestureRecognizer:)))
-            
         sceneView.addGestureRecognizer(tapGesture)
+        
+        // Add pinch gesture
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -82,67 +90,85 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         case .ended:
             let location = recognizer.location(ofTouch: 0,
                                             in: sceneView)
-            let hit = sceneView.hitTest(location,
-                                        types: .existingPlaneUsingGeometry)
-            
-            if let hit = hit.first {
-                placeBlockOnPlaneAt(hit)
+        
+            if (canPlacePoster) {
+                
+                let hitList = sceneView.hitTest(location,
+                types: .existingPlaneUsingGeometry)
+                
+                if let hit = hitList.first {
+                    
+                    // TODO: Edit SCNPlane width and height to change poster size.
+                    let posterGeo = SCNPlane(width: 0.05, height: 0.1)
+                    let posterMat = SCNMaterial()
+                    posterMat.diffuse.contents = UIImage(named: "arewecool")
+                    posterGeo.materials = [posterMat]
+                    
+                    // TODO: Edit eulerAngles to rotate the poster.
+                    let posterNode = SCNNode(geometry: posterGeo)
+                    posterNode.transform = SCNMatrix4(hit.anchor!.transform)
+                    posterNode.eulerAngles = SCNVector3(posterNode.eulerAngles.x + (-Float.pi / 2), posterNode.eulerAngles.y, posterNode.eulerAngles.z)
+                    posterNode.position = SCNVector3(hit.worldTransform.columns.3.x, hit.worldTransform.columns.3.y, hit.worldTransform.columns.3.z)
+                
+                    // Add Poster!
+                    posterNode.name = "MyPoster"
+                    
+                    let pointer = Unmanaged.passUnretained(posterNode).toOpaque()
+                    posterNodeRefereneces.addPointer(pointer)
+                    
+                    numPosters = numPosters + 1
+                    if (numPosters >= maxPosters) {
+                        canPlacePoster = false
+                    }
+                    
+                    sceneView?.scene.rootNode.addChildNode(posterNode)
+                    
+                } else {
+                    print("Not on valid plane!")
+                }
+            } else {
+                
+                // Get a list of nodes hit.
+                let hitList = sceneView.hitTest(location, options: [SCNHitTestOption.searchMode : 1])
+                
+                // Find the first node that has the designated name.
+                // Potential for error here but assume we can't have overlapping posters.
+                for hit in hitList.filter( { $0.node.name != nil }) {
+                    if hit.node.name == "MyPoster" {
+                        
+                        // Check the references for
+                        for n in 0 ..< posterNodeRefereneces.count {
+                            
+                            // This should never return (because why?)
+                            guard n < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: n) else { return }
+                            
+                            // Get the object at the pointer.
+                            let referencedHit = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+                            
+                            // Check if object at pointer is truly the hit poster.
+                            if (referencedHit === hit.node) {
+                                // Try rotating the node
+                                hit.node.eulerAngles = SCNVector3(hit.node.eulerAngles.x, hit.node.eulerAngles.y + (Float.pi / 2), hit.node.eulerAngles.z)
+                            }
+                        }
+
+                    }
+                }
+                
             }
         default:
             print("tapped default")
         }
     }
     
-    func placeBlockOnPlaneAt(_ hitResult: ARHitTestResult) {
-//        let box = createBox()
-//        position(node: box, atHit: hit)
-        
-        // 1.
-        let planeGeometry = SCNPlane(width: 0.2, height: 0.35)
-        let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "arewecool")
-        planeGeometry.materials = [material]
-
-        // 2.
-        let paintingNode = SCNNode(geometry: planeGeometry)
-        paintingNode.transform = SCNMatrix4(hitResult.anchor!.transform)
-        paintingNode.eulerAngles = SCNVector3(paintingNode.eulerAngles.x + (-Float.pi / 2), paintingNode.eulerAngles.y, paintingNode.eulerAngles.z)
-        paintingNode.position = SCNVector3(hitResult.worldTransform.columns.3.x, hitResult.worldTransform.columns.3.y, hitResult.worldTransform.columns.3.z)
-
-        
-        
-        //sceneView?.scene.rootNode.addChildNode(box)
-        sceneView.scene.rootNode.addChildNode(paintingNode)
+    @objc func pinchGesture(_ gesture: UIPinchGestureRecognizer) {
+        print(gesture.scale)
     }
     
-    private func createBox() -> SCNNode {
-        
-        let image = UIImage(named: "arewecool")
-        let node = SCNNode(geometry: SCNPlane(width: 0.5, height: 0.5))
-        
-        node.geometry?.firstMaterial?.diffuse.contents = image
-        
-//        let box = SCNBox(width: 0.15, height: 0.20, length: 0.02, chamferRadius: 0.02)
-//        let boxNode = SCNNode(geometry: box)
-//        boxNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
-        
-        return node
-    }
-    
-    private func position(node: SCNNode, atHit hit: ARHitTestResult) {
-        node.transform = SCNMatrix4(hit.anchor!.transform)
-        node.eulerAngles = SCNVector3Make(node.eulerAngles.x + (Float.pi / 2), node.eulerAngles.y, node.eulerAngles.z)
-        
-        let position = SCNVector3Make(hit.worldTransform.columns.3.x + node.geometry!.boundingBox.min.z, hit.worldTransform.columns.3.y, hit.worldTransform.columns.3.z)
-        node.position = position
-    }
 }
-
-
-
 
 extension UIColor {
     open class var transparentLightBlue: UIColor {
-        return UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.3)
+        return UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.5)
     }
 }
