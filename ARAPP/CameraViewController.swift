@@ -132,9 +132,11 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
 //                selectedNode.rotation = SCNVector4(relativeNormal!.x, relativeNormal!.y, relativeNormal!.z, selectedNode.eulerAngles.z - Float(recognizer.rotation))
                 
                 
-                
+     
+               //selectedNode.runAction(action)
                 // TODO does this work on multiple surfaces?
-                let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.parent!.worldFront, duration: TimeInterval(0.1))
+                //https://stackoverflow.com/questions/45357020/rotate-scnnode-relative-local-coordinates
+                let action = SCNAction.rotate(by: .pi, around: selectedNode.convertVector(SCNVector3(0, 0, 1), to: selectedNode.parent), duration: TimeInterval(1))
                 selectedNode.runAction(action)
                 
                 // Reset the gesture recognizer's rotation property.
