@@ -48,6 +48,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         
         // Add pan gesture for moving poster around.
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(CameraViewController.didPanScene(withGestureRecognizer:)))
+        panGesture.maximumNumberOfTouches = 1
         sceneView.addGestureRecognizer(panGesture)
         
         // Add pinch gesture for resizing selected poster.
@@ -119,7 +120,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
 
                 // Rotate the selected poster.
-                selectedNode.eulerAngles = SCNVector3(selectedNode.eulerAngles.x, selectedNode.eulerAngles.y, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                // selectedNode.eulerAngles = SCNVector3(selectedNode.eulerAngles.x, selectedNode.eulerAngles.y, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                // TODO Rotate about the parent plane's normal instead.
+                selectedNode.rotation = SCNVector4(0, 0, 1, selectedNode.eulerAngles.z - Float(recognizer.rotation))
 
                 // Reset the gesture recognizer's rotation property.
                 recognizer.rotation = 0
@@ -198,7 +201,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     // Select a poster by long pressing it.
     @objc func didLongPressScene(withGestureRecognizer recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
-            
+                    
             // Get the location of the long press.
             let location = recognizer.location(in: sceneView)
         
@@ -210,6 +213,10 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // any of them are posters.
             for hit in hitList.filter( { $0.node.name != nil }) {
                 if hit.node.name == "MyPoster" {
+                    
+                    // Haptic feedback!
+                    let generator = UIImpactFeedbackGenerator(style: .heavy)
+                    generator.impactOccurred()
                     
                     // Iterate through the list of posterNodes that we're
                     // keeping track of. We want to be able to match posters that
@@ -228,11 +235,25 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
 //                            posterNodeRefereneces.removePointer(at: n)
 //                            hit.node.removeFromParentNode()
                             
+                            // Update material for old object.
+                            if (selectedPoster != -1) {
+                                guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
+                                let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
+                                let unhighlightMat = SCNMaterial()
+                                unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                oldHit.geometry?.materials[0] = unhighlightMat
+                            }
+                            
+                            // Update material for newly selected object.
+                            let highlightMat = SCNMaterial()
+                            highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                            highlightMat.emission.contents = UIColor.yellow.withAlphaComponent(0.1)
+                            hit.node.geometry?.materials[0] = highlightMat
+                            
                             // Store the index as the selected poster.
                             selectedPoster = n
                         }
                     }
-
                 }
             }
         }
@@ -265,6 +286,15 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 // If we tap something that's not a poster, deselect any
                 // selected posters. Otherwise, create a poster.
                 if (selectedPoster != -1) {
+                    
+                    // Update material for old object.
+                    guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
+                    let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
+                    let unhighlightMat = SCNMaterial()
+                    unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                    oldHit.geometry?.materials[0] = unhighlightMat
+                    
+                    // Unselect posters.
                     selectedPoster = -1
                 } else {
                     let hitList = sceneView.hitTest(location,
