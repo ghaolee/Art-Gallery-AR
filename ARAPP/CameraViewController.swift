@@ -52,8 +52,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         sceneView.addGestureRecognizer(panGesture)
         
         // Add pinch gesture for resizing selected poster.
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(CameraViewController.didPinchScene(withGestureRecognizer:)))
-        sceneView.addGestureRecognizer(pinchGesture)
+//        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(CameraViewController.didPinchScene(withGestureRecognizer:)))
+//        sceneView.addGestureRecognizer(pinchGesture)
         
         // Add rotate gesture for rotating poster.
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(CameraViewController.didRotateScene(withGestureRecognizer:)))
@@ -106,6 +106,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let y = CGFloat(planeAnchor.center.y)
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
+        
+        // TODO planeNode.anchor = anchor?? Is this needed?
+        
+//        // Fix child nodes on the plane.
+//        for child in node.childNodes {
+//            child.transform = SCNMatrix4(anchor.transform)
+//        }
     }
     
     // Rotate a poster after it's been selected.
@@ -122,7 +129,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 // Rotate the selected poster.
                 // selectedNode.eulerAngles = SCNVector3(selectedNode.eulerAngles.x, selectedNode.eulerAngles.y, selectedNode.eulerAngles.z - Float(recognizer.rotation))
                 // TODO Rotate about the parent plane's normal instead.
-                selectedNode.rotation = SCNVector4(0, 0, 1, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                //let relativeNormal = selectedNode.parent?.convertVector(SCNVector3(0, 0, 1), to: selectedNode)
+                //selectedNode.rotation = SCNVector4(relativeNormal.x, relativeNormal.y, relativeNormal.z, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.parent!.worldFront, duration: TimeInterval(0.1))
+                selectedNode.runAction(action)
+                
+                // TODO does this work on multiple surfaces?
+                
 
                 // Reset the gesture recognizer's rotation property.
                 recognizer.rotation = 0
@@ -241,12 +254,14 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                                 let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                                 let unhighlightMat = SCNMaterial()
                                 unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                unhighlightMat.isDoubleSided = true
                                 oldHit.geometry?.materials[0] = unhighlightMat
                             }
                             
                             // Update material for newly selected object.
                             let highlightMat = SCNMaterial()
                             highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                            highlightMat.isDoubleSided = true
                             highlightMat.emission.contents = UIColor.yellow.withAlphaComponent(0.1)
                             hit.node.geometry?.materials[0] = highlightMat
                             
@@ -292,6 +307,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                     let unhighlightMat = SCNMaterial()
                     unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                    unhighlightMat.isDoubleSided = true
                     oldHit.geometry?.materials[0] = unhighlightMat
                     
                     // Unselect posters.
@@ -305,6 +321,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         let posterGeo = SCNPlane(width: 0.05, height: 0.1)
                         let posterMat = SCNMaterial()
                         posterMat.diffuse.contents = UIImage(named: "arewecool")
+                        posterMat.isDoubleSided = true
                         posterGeo.materials = [posterMat]
                         
                         let posterNode = SCNNode(geometry: posterGeo)
