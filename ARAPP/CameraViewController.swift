@@ -106,13 +106,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let y = CGFloat(planeAnchor.center.y)
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
-        
-        // TODO planeNode.anchor = anchor?? Is this needed?
-        
-//        // Fix child nodes on the plane.
-//        for child in node.childNodes {
-//            child.transform = SCNMatrix4(anchor.transform)
-//        }
     }
     
     // Rotate a poster after it's been selected.
@@ -127,16 +120,23 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
 
                 // Rotate the selected poster.
+                
+                // WHICH IS OF THESE WORK?
+                
                 // selectedNode.eulerAngles = SCNVector3(selectedNode.eulerAngles.x, selectedNode.eulerAngles.y, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                
+                
+                
                 // TODO Rotate about the parent plane's normal instead.
-                //let relativeNormal = selectedNode.parent?.convertVector(SCNVector3(0, 0, 1), to: selectedNode)
-                //selectedNode.rotation = SCNVector4(relativeNormal.x, relativeNormal.y, relativeNormal.z, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+//                let relativeNormal = selectedNode.parent?.convertVector(SCNVector3(0, 0, 1), to: selectedNode)
+//                selectedNode.rotation = SCNVector4(relativeNormal!.x, relativeNormal!.y, relativeNormal!.z, selectedNode.eulerAngles.z - Float(recognizer.rotation))
+                
+                
+                
+                // TODO does this work on multiple surfaces?
                 let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.parent!.worldFront, duration: TimeInterval(0.1))
                 selectedNode.runAction(action)
                 
-                // TODO does this work on multiple surfaces?
-                
-
                 // Reset the gesture recognizer's rotation property.
                 recognizer.rotation = 0
             }
@@ -335,7 +335,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         let pointer = Unmanaged.passUnretained(posterNode).toOpaque()
                         posterNodeRefereneces.addPointer(pointer)
                         
-                        sceneView?.scene.rootNode.addChildNode(posterNode)
+                        // sceneView?.scene.rootNode.addChildNode(posterNode)
+                        
+                        if let planeHit = sceneView.hitTest(location, options: nil).first {
+                            let planeNode = planeHit.node
+                            planeNode.addChildNode(posterNode)
+                        }
                         
                     } else {
                         print("Not on valid plane!")
