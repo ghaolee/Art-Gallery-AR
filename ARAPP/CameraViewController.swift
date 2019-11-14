@@ -58,6 +58,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         // Add rotate gesture for rotating poster.
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(CameraViewController.didRotateScene(withGestureRecognizer:)))
         sceneView.addGestureRecognizer(rotateGesture)
+        
+        print(sceneView?.scene.rootNode.childNodes.count)
     }
     
     // Create a transparent plane whenever a new anchor is detected and added to the scene.
@@ -84,31 +86,57 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         
         // Add the plane to the anchor.
         node.addChildNode(planeNode)
+        
+        // Note: when a new plane is detected, it is automatically added to
+        // rootNode as a child. These plane nodes are then added to those children.
     }
     
-    // Update the anchor planes when possible.
+    // This function is called when a plane anchor has been updated.
+    // Here, we need to update the plane node that corresponds to the plane anchor.
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         
-        // Get the plane anchor, as well as its node (origin) and geometry.
+        // Get the plane anchor, as well as its plane node and geometry.
         guard let planeAnchor = anchor as?  ARPlaneAnchor,
             let planeNode = node.childNodes.first,
             let plane = planeNode.geometry as? SCNPlane
             else { return }
          
-        // Update the extent (size) of an existing anchor plane.
+        // Update the extent (size) of the plane node's geometry.
         let width = CGFloat(planeAnchor.extent.x)
         let height = CGFloat(planeAnchor.extent.z)
         plane.width = width
         plane.height = height
          
-        // Update the position of an existing anchor plane.
+        // Calculate the position for the new plane visualizatino.
         let x = CGFloat(planeAnchor.center.x)
         let y = CGFloat(planeAnchor.center.y)
         let z = CGFloat(planeAnchor.center.z)
+        
+        // Calculate the difference between the old plane visualization and the new
+        // plane visualization.
+        let difference = SCNVector3((Float(x) - planeNode.position.x), (Float(x) - planeNode.position.y), (Float(z) - planeNode.position.z))
+        
+        // Update the position of the plane visualization.
         planeNode.position = SCNVector3(x, y, z)
+        
+        // Update the position of all the child nodes of the plane node.
+//        print("Num children in plane: ")
+//        print(node.childNodes.count)
+//        for child in planeNode.childNodes {
+//            child.position = SCNVector3((child.position.x + difference.x), (child.position.y + difference.y), (child.position.z + difference.z))
+//        }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        node.enumerateChildNodes {
+            (childNode, _) in
+            childNode.removeFromParentNode()
+        }
     }
     
     // Rotate a poster after it's been selected.
+    // This definitely works.
     @objc func didRotateScene(withGestureRecognizer recognizer: UIRotationGestureRecognizer) {
         if (selectedPoster != -1) {
             if recognizer.state == .began || recognizer.state == .changed {
@@ -118,25 +146,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
 
                 // Get the posterNode that is being referenced.
                 let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
-
-                // Rotate the selected poster.
                 
-                // WHICH IS OF THESE WORK?
-                
-                // selectedNode.eulerAngles = SCNVector3(selectedNode.eulerAngles.x, selectedNode.eulerAngles.y, selectedNode.eulerAngles.z - Float(recognizer.rotation))
-                
-                
-                
-                // TODO Rotate about the parent plane's normal instead.
-//                let relativeNormal = selectedNode.parent?.convertVector(SCNVector3(0, 0, 1), to: selectedNode)
-//                selectedNode.rotation = SCNVector4(relativeNormal!.x, relativeNormal!.y, relativeNormal!.z, selectedNode.eulerAngles.z - Float(recognizer.rotation))
-                
-                
-     
-               //selectedNode.runAction(action)
-                // TODO does this work on multiple surfaces?
-                //https://stackoverflow.com/questions/45357020/rotate-scnnode-relative-local-coordinates
-                let action = SCNAction.rotate(by: .pi, around: selectedNode.convertVector(SCNVector3(0, 0, 1), to: selectedNode.parent), duration: TimeInterval(1))
+                // Create a SCNAction to rotate the poster by.
+                let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.convertVector(SCNVector3(0, 0, 1), to: selectedNode.parent), duration: TimeInterval(0.1))
                 selectedNode.runAction(action)
                 
                 // Reset the gesture recognizer's rotation property.
@@ -247,6 +259,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         // Check if object referenced is *truly* the same object.
                         if (referencedHit === hit.node) {
                             // Remove the node. removePointer() automatically fixes the NSPointerArray count.
+                            
 //                            posterNodeRefereneces.removePointer(at: n)
 //                            hit.node.removeFromParentNode()
                             
@@ -336,14 +349,20 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         
                         let pointer = Unmanaged.passUnretained(posterNode).toOpaque()
                         posterNodeRefereneces.addPointer(pointer)
+        
+                        // Instead of adding the posterNode to sceneView?.scene.rootNode,
+                        // we instead add it to the plane that it hits.
                         
                         // sceneView?.scene.rootNode.addChildNode(posterNode)
                         
                         if let planeHit = sceneView.hitTest(location, options: nil).first {
                             let planeNode = planeHit.node
-                            planeNode.addChildNode(posterNode)
+                            for anchorPlaneNode in (sceneView?.scene.rootNode.childNodes)! {
+                                if (anchorPlaneNode === planeNode) {
+                                    planeNode.addChildNode(posterNode)
+                                }
+                            }
                         }
-                        
                     } else {
                         print("Not on valid plane!")
                     }
