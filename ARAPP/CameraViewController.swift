@@ -87,6 +87,10 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         // Add the plane to the anchor.
         node.addChildNode(planeNode)
         
+        // DEBUG
+        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
+        print("New Plane Detected. Num nodes in rootNode: \(numNodesInRootNode)")
+        
         // Note: when a new plane is detected, it is automatically added to
         // rootNode as a child. These plane nodes are then added to those children.
     }
@@ -100,6 +104,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             let planeNode = node.childNodes.first,
             let plane = planeNode.geometry as? SCNPlane
             else { return }
+        
+        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
+        print("Plane Updating. Num nodes in rootNode: \(numNodesInRootNode)")
          
         // Update the extent (size) of the plane node's geometry.
         let width = CGFloat(planeAnchor.extent.x)
@@ -112,27 +119,17 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let y = CGFloat(planeAnchor.center.y)
         let z = CGFloat(planeAnchor.center.z)
         
-        // Calculate the difference between the old plane visualization and the new
-        // plane visualization.
-        let difference = SCNVector3((Float(x) - planeNode.position.x), (Float(x) - planeNode.position.y), (Float(z) - planeNode.position.z))
-        
         // Update the position of the plane visualization.
         planeNode.position = SCNVector3(x, y, z)
-        
-        // Update the position of all the child nodes of the plane node.
-//        print("Num children in plane: ")
-//        print(node.childNodes.count)
-//        for child in planeNode.childNodes {
-//            child.position = SCNVector3((child.position.x + difference.x), (child.position.y + difference.y), (child.position.z + difference.z))
-//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        node.enumerateChildNodes {
-            (childNode, _) in
-            childNode.removeFromParentNode()
-        }
+        guard let _ = anchor as?  ARPlaneAnchor,
+            let planeNode = node.childNodes.first
+            else { return }
+        planeNode.removeFromParentNode()
+        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
+        print("Plane Deleted. Num nodes in rootNode: \(numNodesInRootNode)")
     }
     
     // Rotate a poster after it's been selected.
@@ -353,13 +350,14 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         // Instead of adding the posterNode to sceneView?.scene.rootNode,
                         // we instead add it to the plane that it hits.
                         
-                        // sceneView?.scene.rootNode.addChildNode(posterNode)
+                        //sceneView?.scene.rootNode.addChildNode(posterNode)
                         
                         if let planeHit = sceneView.hitTest(location, options: nil).first {
                             let planeNode = planeHit.node
                             for anchorPlaneNode in (sceneView?.scene.rootNode.childNodes)! {
                                 if (anchorPlaneNode === planeNode) {
                                     planeNode.addChildNode(posterNode)
+                                    print(planeNode.childNodes.count)
                                 }
                             }
                         }
