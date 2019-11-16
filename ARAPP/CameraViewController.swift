@@ -11,58 +11,96 @@ import UIKit
 import SceneKit
 import ARKit
 
-// https://www.appcoda.com/arkit-horizontal-plane/
-
 class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    @IBOutlet weak var sceneView: ARSCNView!
+    // MARK: OUTLETS
+    // ==============================================================
     
-    // An array to keep track of posters that have been added to the scene.
-    var posterNodeRefereneces = NSPointerArray.weakObjects()
+    @IBOutlet weak var sceneView: ARSCNView! // The main AR camera view.
+    @IBOutlet weak var deleteButton: UIButton!
     
-    // A variable to keep track of which (if any) poster is selected.
-    var selectedPoster: Int = -1
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: ACTIONS
+    // ==============================================================
+    @IBAction func didDeleteButton(_ sender: Any) {
+        // Remove the node.
+        //  removePointer() automatically fixes the NSPointerArray count.
+        guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
+        let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+        posterNodeRefereneces.removePointer(at: selectedPoster)
+        selectedPosterNode.removeFromParentNode()
+        
+        // Take care of deselect nodes.
+        selectedPoster = -1
+        deleteButton.isHidden = true
+        
+        for child in sceneView.scene.rootNode.childNodes {
+            print(child.childNodes.count)
+        }
+        
     }
     
-    // Set up the sceneView and gesture recognizers here.
+    // MARK: OTHER VARIABLES
+    // ==============================================================
+    
+    var posterNodeRefereneces = NSPointerArray.weakObjects() // Array of added posters.
+    var selectedPoster: Int = -1 // Keep track of selected poster.
+    
+    // MARK: FUNCTIONS
+    // ==============================================================
+    
+    // Called at app load.
+    //      1. Configure delete button.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Configure button.
+        deleteButton.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+        deleteButton.layer.cornerRadius = 5
+        deleteButton.layer.borderWidth = 1
+        deleteButton.layer.borderColor = UIColor.black.cgColor
+        deleteButton.isHidden = true
+    }
+    
+    // Called after the completion of any drawing and animations involved in the
+    // initial appearance of the view.
+    //      1. Configure the AR camera view.
+    //      2. Configure and add various gesture recognizers.
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Set up the scene view.
+        // Set up the AR camera view to detect vertical planes.
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .vertical
         sceneView.session.run(configuration)
         sceneView.delegate = self
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
 
-        // Add tap gesture to add a poster or to deselect a poster.
+        // Add a tap gesture recognizer to add or deselect posters.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.didTapScene(withGestureRecognizer:)))
         sceneView.addGestureRecognizer(tapGesture)
         
-        // Add long press gesture to select poster.
+        // Add a long press gesture recognizer to select posters.
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(CameraViewController.didLongPressScene(withGestureRecognizer:)))
         sceneView.addGestureRecognizer(longPressGesture)
         
-        // Add pan gesture for moving poster around.
+        // Add a pan gesture recognizer to move selected posters around.
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(CameraViewController.didPanScene(withGestureRecognizer:)))
         panGesture.maximumNumberOfTouches = 1
         sceneView.addGestureRecognizer(panGesture)
         
-        // Add pinch gesture for resizing selected poster.
-//        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(CameraViewController.didPinchScene(withGestureRecognizer:)))
-//        sceneView.addGestureRecognizer(pinchGesture)
+        // Add a pinch gesture recognizer for resizing selected posters.
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(CameraViewController.didPinchScene(withGestureRecognizer:)))
+        sceneView.addGestureRecognizer(pinchGesture)
         
-        // Add rotate gesture for rotating poster.
+        // Add a rotate gesture recognizer for rotating selected posters..
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(CameraViewController.didRotateScene(withGestureRecognizer:)))
         sceneView.addGestureRecognizer(rotateGesture)
-        
-        print(sceneView?.scene.rootNode.childNodes.count)
     }
     
-    // Create a transparent plane whenever a new anchor is detected and added to the scene.
+    // Called when a new anchor corresponding to a plane is detected and added into
+    // the scene's rootNode.
+    //      1. Create a semi-transparent blue box to roughly show the extent of the
+    //          detected plane.
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         
         // Get the plane anchor.
@@ -86,17 +124,11 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         
         // Add the plane to the anchor.
         node.addChildNode(planeNode)
-        
-        // DEBUG
-        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
-        print("New Plane Detected. Num nodes in rootNode: \(numNodesInRootNode)")
-        
-        // Note: when a new plane is detected, it is automatically added to
-        // rootNode as a child. These plane nodes are then added to those children.
     }
     
     // This function is called when a plane anchor has been updated.
-    // Here, we need to update the plane node that corresponds to the plane anchor.
+    //      1. Here, we need to update the plane node that corresponds
+    //          to the plane anchor.
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         
         // Get the plane anchor, as well as its plane node and geometry.
@@ -104,10 +136,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             let planeNode = node.childNodes.first,
             let plane = planeNode.geometry as? SCNPlane
             else { return }
-        
-        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
-        print("Plane Updating. Num nodes in rootNode: \(numNodesInRootNode)")
-         
+    
         // Update the extent (size) of the plane node's geometry.
         let width = CGFloat(planeAnchor.extent.x)
         let height = CGFloat(planeAnchor.extent.z)
@@ -123,13 +152,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         planeNode.position = SCNVector3(x, y, z)
     }
     
+    // This function is called when an anchor node is no longer recognized.
+    //      1. Delete the plane node that is the child of the anchor node.
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
         guard let _ = anchor as?  ARPlaneAnchor,
             let planeNode = node.childNodes.first
             else { return }
         planeNode.removeFromParentNode()
-        let numNodesInRootNode = sceneView.scene.rootNode.childNodes.count
-        print("Plane Deleted. Num nodes in rootNode: \(numNodesInRootNode)")
     }
     
     // Rotate a poster after it's been selected.
@@ -232,15 +261,14 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get list of objects 'hit' at that location.
             // Assume we haven't found any posters at that location.
             let hitList = sceneView.hitTest(location, options: [SCNHitTestOption.searchMode : 1])
+            print("LONG")
+            
+            print(hitList.count)
             
             // Iterate through the list of objects 'hit' and check to see if
             // any of them are posters.
             for hit in hitList.filter( { $0.node.name != nil }) {
                 if hit.node.name == "MyPoster" {
-                    
-                    // Haptic feedback!
-                    let generator = UIImpactFeedbackGenerator(style: .heavy)
-                    generator.impactOccurred()
                     
                     // Iterate through the list of posterNodes that we're
                     // keeping track of. We want to be able to match posters that
@@ -255,10 +283,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         
                         // Check if object referenced is *truly* the same object.
                         if (referencedHit === hit.node) {
-                            // Remove the node. removePointer() automatically fixes the NSPointerArray count.
                             
-//                            posterNodeRefereneces.removePointer(at: n)
-//                            hit.node.removeFromParentNode()
+                            // Haptic feedback!
+                            let generator = UIImpactFeedbackGenerator(style: .heavy)
+                            generator.impactOccurred()
+                            
+                            // Show delete button.
+                            deleteButton.isHidden = false
                             
                             // Update material for old object.
                             if (selectedPoster != -1) {
@@ -296,6 +327,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get list of objects 'hit' at that location.
             // Assume we haven't found any posters at that location.
             let hitList = sceneView.hitTest(location, options: [SCNHitTestOption.searchMode : 1])
+            print("TAP")
+            print(hitList.count)
+            print(posterNodeRefereneces.count)
             var foundPoster = false
             
             // Iterate through the list of objects 'hit' and check to see if
@@ -322,6 +356,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     unhighlightMat.isDoubleSided = true
                     oldHit.geometry?.materials[0] = unhighlightMat
                     
+                    // Hide delete button.
+                    deleteButton.isHidden = true
+                    
                     // Unselect posters.
                     selectedPoster = -1
                 } else {
@@ -344,23 +381,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         // Add Poster!
                         posterNode.name = "MyPoster"
                         
+                        // BUG: Starting here
                         let pointer = Unmanaged.passUnretained(posterNode).toOpaque()
                         posterNodeRefereneces.addPointer(pointer)
-        
-                        // Instead of adding the posterNode to sceneView?.scene.rootNode,
-                        // we instead add it to the plane that it hits.
+                        sceneView.scene.rootNode.addChildNode(posterNode)
                         
-                        //sceneView?.scene.rootNode.addChildNode(posterNode)
                         
-                        if let planeHit = sceneView.hitTest(location, options: nil).first {
-                            let planeNode = planeHit.node
-                            for anchorPlaneNode in (sceneView?.scene.rootNode.childNodes)! {
-                                if (anchorPlaneNode === planeNode) {
-                                    planeNode.addChildNode(posterNode)
-                                    print(planeNode.childNodes.count)
-                                }
-                            }
-                        }
                     } else {
                         print("Not on valid plane!")
                     }
