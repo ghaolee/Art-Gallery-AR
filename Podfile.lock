@@ -1,0 +1,16 @@
+PODS:
+  - ColorSlider (4.4)
+
+DEPENDENCIES:
+  - ColorSlider (~> 4.4)
+
+SPEC REPOS:
+  trunk:
+    - ColorSlider
+
+SPEC CHECKSUMS:
+  ColorSlider: 9a888e65b871fa1e6a26fadebf4931c949935681
+
+PODFILE CHECKSUM: c58ab17294a3fb11b9c0c164f3ed7e495c80a334
+
+COCOAPODS: 1.8.4

@@ -18,6 +18,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     
     @IBOutlet weak var sceneView: ARSCNView! // The main AR camera view.
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var clearButton: UIButton!
     
     // MARK: ACTIONS
     // ==============================================================
@@ -36,13 +37,35 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         for child in sceneView.scene.rootNode.childNodes {
             print(child.childNodes.count)
         }
-        
     }
+    @IBAction func didClearButton(_ sender: Any) {
+
+//        // Remove all posterNodes
+//        for n in 0 ..< posterNodeRefereneces.count {
+//            guard n < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: n) else { return }
+//            let posterNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+//            posterNodeRefereneces.removePointer(at: n)
+//            posterNode.removeFromParentNode()
+//        }
+//
+//        // Remove all anchorNodes
+//        for n in 0 ..< anchorNodeReferences.count {
+//            guard n < anchorNodeReferences.count, let pointer = anchorNodeReferences.pointer(at: n) else { return }
+//            let anchorNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+//            anchorNodeReferences.removePointer(at: n)
+//            anchorNode.removeFromParentNode()
+//        }
+//
+//        let numNodesInRoot = sceneView.scene.rootNode.childNodes.count
+//        print("Number of Nodes in rootNode: \(numNodesInRoot)")
+    }
+    
     
     // MARK: OTHER VARIABLES
     // ==============================================================
     
     var posterNodeRefereneces = NSPointerArray.weakObjects() // Array of added posters.
+    var anchorNodeReferences = NSPointerArray.weakObjects()
     var selectedPoster: Int = -1 // Keep track of selected poster.
     
     // MARK: FUNCTIONS
@@ -52,6 +75,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     //      1. Configure delete button.
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hide clear button because it doesn't work rightn ow
+        clearButton.isHidden = false
         
         // Configure button.
         deleteButton.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
@@ -124,12 +150,18 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         
         // Add the plane to the anchor.
         node.addChildNode(planeNode)
+        
+        // Add the node to the reference array
+        let pointer = Unmanaged.passUnretained(node).toOpaque()
+        anchorNodeReferences.addPointer(pointer)
     }
     
     // This function is called when a plane anchor has been updated.
     //      1. Here, we need to update the plane node that corresponds
     //          to the plane anchor.
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        
+        print(anchorNodeReferences.count)
         
         // Get the plane anchor, as well as its plane node and geometry.
         guard let planeAnchor = anchor as?  ARPlaneAnchor,
@@ -217,6 +249,9 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get Location
             let location = recognizer.location(in: sceneView)
             
+//            let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.convertVector(SCNVector3(0, 0, 1), to: selectedNode.parent), duration: TimeInterval(0.1))
+//            selectedNode.runAction(action)
+            
             switch recognizer.state {
             case .began:
                 // Check if we begin our panning gesture on a poster.
@@ -240,7 +275,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     
                     let difference = SCNVector3((hitTestPlane.first?.worldTransform.columns.3.x)! - lastTouchLocation!.x, (hitTestPlane.first?.worldTransform.columns.3.y)! - lastTouchLocation!.y, (hitTestPlane.first?.worldTransform.columns.3.z)! - lastTouchLocation!.z)
                     
-                    selectedNode.position = SCNVector3(selectedNode.position.x + difference.x, selectedNode.position.y + difference.y, selectedNode.position.z)
+                    selectedNode.position = SCNVector3(selectedNode.position.x + difference.x, selectedNode.position.y + difference.y, selectedNode.position.z + difference.z)
                     
                     lastTouchLocation = SCNVector3((hitTestPlane.first?.worldTransform.columns.3.x)!, (hitTestPlane.first?.worldTransform.columns.3.y)!, (hitTestPlane.first?.worldTransform.columns.3.z)!)
                 }

@@ -32,8 +32,9 @@ class AppContainer: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         UIApplication.shared.isIdleTimerDisabled = true
         setupHorizontalScrollView()
+        
     }
-    
+
     func setupHorizontalScrollView() {
         
         // Section
