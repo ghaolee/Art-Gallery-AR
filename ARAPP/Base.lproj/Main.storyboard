@@ -115,97 +115,119 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="0.10000000149011612" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="iVr-pT-sfl">
-                                <rect key="frame" x="18" y="832" width="150" height="31"/>
-                                <connections>
-                                    <action selector="thicknessSlider:" destination="Q65-oo-KPa" eventType="valueChanged" id="6oC-hP-7lZ"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0099999997764825821" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NaN-ej-TMt">
-                                <rect key="frame" x="18" y="787" width="150" height="29"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnu-lO-IhZ">
+                                <rect key="frame" x="20" y="0.0" width="394" height="896"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="0.10000000149011612" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="iVr-pT-sfl">
+                                        <rect key="frame" x="6" y="758" width="150" height="31"/>
+                                        <connections>
+                                            <action selector="thicknessSlider:" destination="Q65-oo-KPa" eventType="valueChanged" id="6oC-hP-7lZ"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0099999997764825821" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NaN-ej-TMt">
+                                        <rect key="frame" x="6" y="817" width="150" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="lsm-hc-aSe"/>
+                                            <constraint firstAttribute="width" constant="146" id="qQM-77-s03"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="opacitySlider:" destination="Q65-oo-KPa" eventType="valueChanged" id="Uh0-Yv-3HL"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3b-w2-4Yv">
+                                        <rect key="frame" x="8" y="793" width="60" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thickness" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwO-33-xVE">
+                                        <rect key="frame" x="8" y="732" width="78" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VdY-Cz-pNe">
+                                        <rect key="frame" x="338" y="812" width="36" height="32.5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Redo"/>
+                                        <connections>
+                                            <action selector="redoButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="IzR-gL-ZOp"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="XEM-RN-URt">
+                                        <rect key="frame" x="337" y="775" width="37" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Undo"/>
+                                        <connections>
+                                            <action selector="undoButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="xz0-jz-PHZ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VaA-xd-IyN">
+                                        <rect key="frame" x="324" y="737" width="62" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Clear"/>
+                                        <connections>
+                                            <action selector="clearButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="OAf-Xy-Xjj"/>
+                                        </connections>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" image="photo.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0cq-g2-ctr">
+                                        <rect key="frame" x="179" y="811" width="24" height="20"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A9v-7r-LMo">
+                                        <rect key="frame" x="126" y="729" width="40" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button" image="square.and.arrow.down" catalog="system"/>
+                                        <connections>
+                                            <action selector="saveButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="LJX-Pu-JcL"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cfZ-Ps-eVw">
+                                        <rect key="frame" x="-20" y="0.0" width="414" height="729"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" image="pencil.tip" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dKC-Mn-xr4">
+                                        <rect key="frame" x="185" y="748" width="14" height="20"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="146" id="qQM-77-s03"/>
+                                    <constraint firstItem="dKC-Mn-xr4" firstAttribute="leading" secondItem="iVr-pT-sfl" secondAttribute="trailing" constant="31" id="3pp-Ut-Kht"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="trailing" secondItem="iVr-pT-sfl" secondAttribute="trailing" id="9t7-Xv-pow"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="top" secondItem="W3b-w2-4Yv" secondAttribute="bottom" constant="3.5" id="Ep1-xe-WdN"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="leading" secondItem="gwO-33-xVE" secondAttribute="leading" id="IpU-AO-C8I"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="leading" secondItem="iVr-pT-sfl" secondAttribute="leading" id="Kns-wq-ZsN"/>
+                                    <constraint firstItem="iVr-pT-sfl" firstAttribute="top" secondItem="gwO-33-xVE" secondAttribute="bottom" constant="5.5" id="LMR-sa-tNs"/>
+                                    <constraint firstItem="W3b-w2-4Yv" firstAttribute="top" secondItem="iVr-pT-sfl" secondAttribute="bottom" constant="5" id="Pj5-HF-oos"/>
+                                    <constraint firstItem="0cq-g2-ctr" firstAttribute="leading" secondItem="NaN-ej-TMt" secondAttribute="trailing" constant="25" id="WTe-Pa-7Bd"/>
+                                    <constraint firstAttribute="bottom" secondItem="NaN-ej-TMt" secondAttribute="bottom" constant="51" id="bWs-Bq-imp"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="leading" secondItem="W3b-w2-4Yv" secondAttribute="leading" id="erH-u9-csH"/>
+                                    <constraint firstItem="NaN-ej-TMt" firstAttribute="leading" secondItem="cnu-lO-IhZ" secondAttribute="leadingMargin" id="uCi-z0-1IW"/>
                                 </constraints>
-                                <connections>
-                                    <action selector="opacitySlider:" destination="Q65-oo-KPa" eventType="valueChanged" id="Uh0-Yv-3HL"/>
-                                </connections>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opacity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3b-w2-4Yv">
-                                <rect key="frame" x="20" y="769" width="60" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thickness" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwO-33-xVE">
-                                <rect key="frame" x="20" y="811.5" width="78" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VdY-Cz-pNe">
-                                <rect key="frame" x="357" y="802" width="36" height="32.5"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Redo"/>
-                                <connections>
-                                    <action selector="redoButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="IzR-gL-ZOp"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="XEM-RN-URt">
-                                <rect key="frame" x="357" y="832" width="37" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Undo"/>
-                                <connections>
-                                    <action selector="undoButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="xz0-jz-PHZ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VaA-xd-IyN">
-                                <rect key="frame" x="344" y="769" width="62" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Clear"/>
-                                <connections>
-                                    <action selector="clearButton:" destination="Q65-oo-KPa" eventType="touchUpInside" id="OAf-Xy-Xjj"/>
-                                </connections>
-                            </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="pencil.tip" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dKC-Mn-xr4">
-                                <rect key="frame" x="181" y="768" width="14" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="photo.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0cq-g2-ctr">
-                                <rect key="frame" x="176" y="812" width="24" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="VaA-xd-IyN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="W3b-w2-4Yv" secondAttribute="trailing" constant="8" symbolic="YES" id="INH-ve-jEy"/>
-                            <constraint firstItem="d1J-ub-1Ll" firstAttribute="trailing" secondItem="VaA-xd-IyN" secondAttribute="trailing" constant="8" id="KjV-Da-pAr"/>
-                            <constraint firstItem="NaN-ej-TMt" firstAttribute="trailing" secondItem="iVr-pT-sfl" secondAttribute="trailing" id="LVm-Ja-QBT"/>
-                            <constraint firstItem="d1J-ub-1Ll" firstAttribute="trailing" secondItem="VdY-Cz-pNe" secondAttribute="trailing" constant="21" id="NTh-NE-RIf"/>
-                            <constraint firstItem="iVr-pT-sfl" firstAttribute="bottom" secondItem="d1J-ub-1Ll" secondAttribute="bottom" id="QMK-Zq-0uz"/>
-                            <constraint firstItem="d1J-ub-1Ll" firstAttribute="trailing" secondItem="XEM-RN-URt" secondAttribute="trailing" constant="20" id="R22-A8-Yeb"/>
-                            <constraint firstItem="VdY-Cz-pNe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="NaN-ej-TMt" secondAttribute="trailing" constant="8" symbolic="YES" id="Y14-He-PY3"/>
-                            <constraint firstItem="W3b-w2-4Yv" firstAttribute="leading" secondItem="NaN-ej-TMt" secondAttribute="leading" id="atb-dv-QaC"/>
-                            <constraint firstItem="NaN-ej-TMt" firstAttribute="leading" secondItem="gwO-33-xVE" secondAttribute="leading" id="coC-w8-kQv"/>
-                            <constraint firstItem="gwO-33-xVE" firstAttribute="leading" secondItem="iVr-pT-sfl" secondAttribute="leading" id="fWk-hC-jWA"/>
-                            <constraint firstItem="gwO-33-xVE" firstAttribute="top" secondItem="W3b-w2-4Yv" secondAttribute="bottom" constant="22" id="g0o-5C-iWB"/>
-                            <constraint firstItem="iVr-pT-sfl" firstAttribute="top" secondItem="gwO-33-xVE" secondAttribute="bottom" id="h1D-zB-fC0"/>
-                            <constraint firstItem="W3b-w2-4Yv" firstAttribute="leading" secondItem="SjY-ya-sCW" secondAttribute="leadingMargin" id="iIM-DN-7Ob"/>
-                            <constraint firstItem="VdY-Cz-pNe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gwO-33-xVE" secondAttribute="trailing" constant="8" symbolic="YES" id="p9J-Pe-zNW"/>
-                            <constraint firstItem="iVr-pT-sfl" firstAttribute="top" secondItem="NaN-ej-TMt" secondAttribute="bottom" constant="17" id="ueC-Kr-VT5"/>
-                            <constraint firstItem="XEM-RN-URt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iVr-pT-sfl" secondAttribute="trailing" constant="8" symbolic="YES" id="vd7-aJ-6dr"/>
-                            <constraint firstItem="W3b-w2-4Yv" firstAttribute="top" secondItem="d1J-ub-1Ll" secondAttribute="top" constant="725" id="xJJ-av-hrY"/>
-                            <constraint firstItem="NaN-ej-TMt" firstAttribute="top" secondItem="d1J-ub-1Ll" secondAttribute="top" constant="743" id="xZw-gB-Sg5"/>
+                            <constraint firstItem="cnu-lO-IhZ" firstAttribute="trailing" secondItem="d1J-ub-1Ll" secondAttribute="trailing" id="Dhp-pP-r0H"/>
+                            <constraint firstAttribute="bottom" secondItem="cnu-lO-IhZ" secondAttribute="bottom" id="HmY-w8-TMV"/>
+                            <constraint firstItem="cnu-lO-IhZ" firstAttribute="top" secondItem="SjY-ya-sCW" secondAttribute="top" id="Pdo-ek-OUG"/>
+                            <constraint firstItem="cnu-lO-IhZ" firstAttribute="leading" secondItem="d1J-ub-1Ll" secondAttribute="leading" constant="20" id="kjr-yq-Auk"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="d1J-ub-1Ll"/>
                     </view>
+                    <connections>
+                        <outlet property="drawBoard" destination="cfZ-Ps-eVw" id="ods-9U-jHK"/>
+                        <outlet property="test" destination="SjY-ya-sCW" id="tHD-1o-pQ4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FOI-1G-NZF" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1588" y="114"/>
+            <point key="canvasLocation" x="1586.9565217391305" y="113.83928571428571"/>
         </scene>
     </scenes>
     <resources>
         <image name="pencil.tip" catalog="system" width="48" height="64"/>
         <image name="photo.fill" catalog="system" width="64" height="46"/>
+        <image name="square.and.arrow.down" catalog="system" width="60" height="64"/>
     </resources>
 </document>

@@ -28,6 +28,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
         let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
         posterNodeRefereneces.removePointer(at: selectedPoster)
+        posterImageNameArray.remove(at: selectedPoster)
         selectedPosterNode.removeFromParentNode()
         
         // Take care of deselect nodes.
@@ -65,6 +66,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     // ==============================================================
     
     var posterNodeRefereneces = NSPointerArray.weakObjects() // Array of added posters.
+    var posterImageNameArray: [String] = []
     var anchorNodeReferences = NSPointerArray.weakObjects()
     var selectedPoster: Int = -1 // Keep track of selected poster.
     
@@ -249,9 +251,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get Location
             let location = recognizer.location(in: sceneView)
             
-//            let action = SCNAction.rotate(by: -recognizer.rotation, around: selectedNode.convertVector(SCNVector3(0, 0, 1), to: selectedNode.parent), duration: TimeInterval(0.1))
-//            selectedNode.runAction(action)
-            
             switch recognizer.state {
             case .began:
                 // Check if we begin our panning gesture on a poster.
@@ -331,14 +330,15 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                                 guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
                                 let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                                 let unhighlightMat = SCNMaterial()
-                                unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                
+                                unhighlightMat.diffuse.contents = UIImage(named: posterImageNameArray[selectedPoster])
                                 unhighlightMat.isDoubleSided = true
                                 oldHit.geometry?.materials[0] = unhighlightMat
                             }
                             
                             // Update material for newly selected object.
                             let highlightMat = SCNMaterial()
-                            highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                            highlightMat.diffuse.contents = UIImage(named: posterImageNameArray[n])
                             highlightMat.isDoubleSided = true
                             highlightMat.emission.contents = UIColor.yellow.withAlphaComponent(0.1)
                             hit.node.geometry?.materials[0] = highlightMat
@@ -387,7 +387,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
                     let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                     let unhighlightMat = SCNMaterial()
-                    unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                    unhighlightMat.diffuse.contents = UIImage(named: posterImageNameArray[selectedPoster])
                     unhighlightMat.isDoubleSided = true
                     oldHit.geometry?.materials[0] = unhighlightMat
                     
@@ -404,7 +404,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         
                         let posterGeo = SCNPlane(width: 0.05, height: 0.1)
                         let posterMat = SCNMaterial()
-                        posterMat.diffuse.contents = UIImage(named: "arewecool")
+                        if let data = UserDefaults.standard.data(forKey: "drawings"), let image = UIImage(data: data) {
+                            posterMat.diffuse.contents = image
+                            posterImageNameArray.append("drawings")
+                        } else {
+                            posterMat.diffuse.contents = UIImage(named: "arewecool")
+                            posterImageNameArray.append("arewecool")
+                        }
                         posterMat.isDoubleSided = true
                         posterGeo.materials = [posterMat]
                         
