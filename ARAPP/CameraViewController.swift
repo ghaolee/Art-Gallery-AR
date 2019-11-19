@@ -18,7 +18,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     
     @IBOutlet weak var sceneView: ARSCNView! // The main AR camera view.
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var makeVertical: UIButton!
     
     // MARK: ACTIONS
     // ==============================================================
@@ -39,28 +39,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             print(child.childNodes.count)
         }
     }
-    @IBAction func didClearButton(_ sender: Any) {
-
-//        // Remove all posterNodes
-//        for n in 0 ..< posterNodeRefereneces.count {
-//            guard n < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: n) else { return }
-//            let posterNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
-//            posterNodeRefereneces.removePointer(at: n)
-//            posterNode.removeFromParentNode()
-//        }
-//
-//        // Remove all anchorNodes
-//        for n in 0 ..< anchorNodeReferences.count {
-//            guard n < anchorNodeReferences.count, let pointer = anchorNodeReferences.pointer(at: n) else { return }
-//            let anchorNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
-//            anchorNodeReferences.removePointer(at: n)
-//            anchorNode.removeFromParentNode()
-//        }
-//
-//        let numNodesInRoot = sceneView.scene.rootNode.childNodes.count
-//        print("Number of Nodes in rootNode: \(numNodesInRoot)")
-    }
     
+    @IBAction func makeVertical(_ sender: Any) {
+        guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
+        let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+        let action = SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0)
+        selectedNode.runAction(action)
+    }
     
     // MARK: OTHER VARIABLES
     // ==============================================================
@@ -79,7 +64,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         super.viewDidLoad()
         
         // Hide clear button because it doesn't work rightn ow
-        clearButton.isHidden = false
+        makeVertical.isHidden = true
         
         // Configure button.
         deleteButton.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
@@ -304,6 +289,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             for hit in hitList.filter( { $0.node.name != nil }) {
                 if hit.node.name == "MyPoster" {
                     
+                    
                     // Iterate through the list of posterNodes that we're
                     // keeping track of. We want to be able to match posters that
                     // are 'hit' to posters we know should exist.
@@ -324,6 +310,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             
                             // Show delete button.
                             deleteButton.isHidden = false
+                            makeVertical.isHidden = false
                             
                             // Update material for old object.
                             if (selectedPoster != -1) {
@@ -331,17 +318,38 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                                 let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                                 let unhighlightMat = SCNMaterial()
                                 
-                                unhighlightMat.diffuse.contents = UIImage(named: posterImageNameArray[selectedPoster])
+                                if (posterImageNameArray[selectedPoster] != "arewecool") {
+                                    if let data = UserDefaults.standard.data(forKey: posterImageNameArray[selectedPoster]), let image = UIImage(data: data) {
+                                        unhighlightMat.diffuse.contents = image
+                                    }  else {
+                                        unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                    }
+                                } else {
+                                    unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                }
+                                
                                 unhighlightMat.isDoubleSided = true
                                 oldHit.geometry?.materials[0] = unhighlightMat
                             }
                             
                             // Update material for newly selected object.
                             let highlightMat = SCNMaterial()
-                            highlightMat.diffuse.contents = UIImage(named: posterImageNameArray[n])
+                            
+                            if (posterImageNameArray[n] != "arewecool") {
+                                if let data = UserDefaults.standard.data(forKey: posterImageNameArray[n]), let image = UIImage(data: data) {
+                                    highlightMat.diffuse.contents = image
+                                }  else {
+                                    highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                }
+                            } else {
+                                highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                            }
+                            
                             highlightMat.isDoubleSided = true
                             highlightMat.emission.contents = UIColor.yellow.withAlphaComponent(0.1)
                             hit.node.geometry?.materials[0] = highlightMat
+                            
+                            makeVertical.isHidden = false
                             
                             // Store the index as the selected poster.
                             selectedPoster = n
@@ -387,12 +395,21 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
                     let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                     let unhighlightMat = SCNMaterial()
-                    unhighlightMat.diffuse.contents = UIImage(named: posterImageNameArray[selectedPoster])
+                    if (posterImageNameArray[selectedPoster] != "arewecool") {
+                        if let data = UserDefaults.standard.data(forKey: posterImageNameArray[selectedPoster]), let image = UIImage(data: data) {
+                            unhighlightMat.diffuse.contents = image
+                        }  else {
+                            unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                        }
+                    } else {
+                        unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                    }
                     unhighlightMat.isDoubleSided = true
                     oldHit.geometry?.materials[0] = unhighlightMat
                     
                     // Hide delete button.
                     deleteButton.isHidden = true
+                    makeVertical.isHidden = true
                     
                     // Unselect posters.
                     selectedPoster = -1
