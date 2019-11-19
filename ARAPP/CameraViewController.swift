@@ -41,6 +41,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     }
     
     @IBAction func makeVertical(_ sender: Any) {
+        // commit testing
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
         let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
         let action = SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0)
