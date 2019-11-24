@@ -21,7 +21,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZGR-H4-M0J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-729" y="114"/>
+            <point key="canvasLocation" x="-517" y="114"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -37,13 +37,42 @@
                                     <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQC-pE-xAG">
                                         <rect key="frame" x="-20" y="0.0" width="414" height="896"/>
                                     </arscnView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="nb4-KB-cZj">
+                                        <rect key="frame" x="166" y="424" width="42" height="20"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ec8-oU-RHs">
+                                        <rect key="frame" x="85" y="383" width="204" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not on a Valid Plane!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xu-b8-5iq">
+                                        <rect key="frame" x="85" y="508" width="204" height="37"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="37" id="TmD-sf-SU2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
+                                    <constraint firstItem="4xu-b8-5iq" firstAttribute="top" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="64" id="75E-3y-Xff"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ec8-oU-RHs" secondAttribute="trailing" constant="85" id="8sm-Jx-JpT"/>
                                     <constraint firstItem="WQC-pE-xAG" firstAttribute="top" secondItem="Gf1-Xw-7b7" secondAttribute="top" id="9G9-hH-amM"/>
+                                    <constraint firstAttribute="trailing" secondItem="4xu-b8-5iq" secondAttribute="trailing" constant="85" id="D97-EM-FtD"/>
+                                    <constraint firstAttribute="bottom" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="452" id="JOq-Z1-4wU"/>
                                     <constraint firstAttribute="trailing" secondItem="WQC-pE-xAG" secondAttribute="trailing" constant="-20" id="K20-Wl-vud"/>
+                                    <constraint firstItem="Ec8-oU-RHs" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="85" id="Psv-Rj-74B"/>
+                                    <constraint firstItem="4xu-b8-5iq" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="85" id="Sud-PB-cxa"/>
+                                    <constraint firstItem="nb4-KB-cZj" firstAttribute="top" secondItem="Ec8-oU-RHs" secondAttribute="bottom" constant="8" id="a1M-v2-9VH"/>
                                     <constraint firstAttribute="bottom" secondItem="WQC-pE-xAG" secondAttribute="bottom" id="cJS-Ew-APx"/>
+                                    <constraint firstItem="nb4-KB-cZj" firstAttribute="top" secondItem="Ec8-oU-RHs" secondAttribute="bottom" constant="8" id="ckg-Ep-Igs"/>
                                     <constraint firstItem="WQC-pE-xAG" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="-20" id="cqm-1m-5J9"/>
+                                    <constraint firstItem="Ec8-oU-RHs" firstAttribute="top" secondItem="Gf1-Xw-7b7" secondAttribute="top" constant="383" id="jcX-sX-rdO"/>
+                                    <constraint firstAttribute="trailing" secondItem="nb4-KB-cZj" secondAttribute="trailing" constant="166" id="q0f-0r-WHC"/>
+                                    <constraint firstItem="nb4-KB-cZj" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="166" id="ubv-pi-Yeo"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hZm-cc-5Y5">
@@ -54,6 +83,16 @@
                                 </state>
                                 <connections>
                                     <action selector="didDeleteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5SM-7L-OPu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfV-e1-cjN">
+                                <rect key="frame" x="20" y="832" width="123" height="30"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Planes: 0">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="numPlanesAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2do-CD-K7u"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p3X-64-epc">
@@ -70,13 +109,16 @@
                         <color key="backgroundColor" red="0.25253972050000001" green="0.86451586790000001" blue="0.58317501449999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="p3X-64-epc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="271" id="2vz-bG-PMq"/>
+                            <constraint firstItem="wfV-e1-cjN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="4is-0y-yga"/>
                             <constraint firstItem="hZm-cc-5Y5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="271" id="5te-1C-TMw"/>
                             <constraint firstItem="Gf1-Xw-7b7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Ara-FA-lyc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Gf1-Xw-7b7" secondAttribute="trailing" constant="20" id="GvF-NQ-EUC"/>
                             <constraint firstAttribute="bottom" secondItem="Gf1-Xw-7b7" secondAttribute="bottom" id="JOi-SV-dmK"/>
                             <constraint firstItem="hZm-cc-5Y5" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="OxC-QZ-6hS"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="wfV-e1-cjN" secondAttribute="bottom" id="UqC-1Z-PTg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hZm-cc-5Y5" secondAttribute="trailing" constant="20" id="b9l-BQ-OjQ"/>
                             <constraint firstItem="Gf1-Xw-7b7" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="cc6-jD-LPC"/>
+                            <constraint firstItem="hZm-cc-5Y5" firstAttribute="leading" secondItem="wfV-e1-cjN" secondAttribute="trailing" constant="128" id="jRR-Yk-uQ3"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="p3X-64-epc" secondAttribute="bottom" constant="40" id="wOI-AV-ciT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="p3X-64-epc" secondAttribute="trailing" constant="20" id="zCJ-i7-JLs"/>
                         </constraints>
@@ -84,28 +126,17 @@
                     </view>
                     <connections>
                         <outlet property="deleteButton" destination="hZm-cc-5Y5" id="cSp-ht-OpI"/>
+                        <outlet property="findingPlaneIndicator" destination="nb4-KB-cZj" id="dxu-KI-8E5"/>
+                        <outlet property="findingPlaneLabel" destination="Ec8-oU-RHs" id="s6w-wC-hvx"/>
+                        <outlet property="invalidPlaneLabel" destination="4xu-b8-5iq" id="sPe-Th-gAt"/>
                         <outlet property="makeVertical" destination="p3X-64-epc" id="VQ8-fD-yli"/>
+                        <outlet property="numPlanesButton" destination="wfV-e1-cjN" id="thv-MX-AkZ"/>
                         <outlet property="sceneView" destination="WQC-pE-xAG" id="PTO-Xf-2S0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="113.83928571428571"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Zw3-KV-EKA">
-            <objects>
-                <viewController id="k0m-fF-IQM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="KD2-mq-dPu">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="gF2-lX-FoW"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="icb-QZ-Uq6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="852" y="114"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5dD-hd-Glr">
@@ -222,7 +253,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FOI-1G-NZF" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1586.9565217391305" y="113.83928571428571"/>
+            <point key="canvasLocation" x="803" y="114"/>
         </scene>
     </scenes>
     <resources>

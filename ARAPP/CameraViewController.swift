@@ -19,6 +19,10 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     @IBOutlet weak var sceneView: ARSCNView! // The main AR camera view.
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var makeVertical: UIButton!
+    @IBOutlet weak var findingPlaneLabel: UILabel!
+    @IBOutlet weak var findingPlaneIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var numPlanesButton: UIButton!
+    @IBOutlet weak var invalidPlaneLabel: UILabel!
     
     // MARK: ACTIONS
     // ==============================================================
@@ -39,7 +43,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             print(child.childNodes.count)
         }
     }
-    
     @IBAction func makeVertical(_ sender: Any) {
         // commit testing
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
@@ -47,14 +50,45 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let action = SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0)
         selectedNode.runAction(action)
     }
+    @IBAction func numPlanesAction(_ sender: Any) {
+        
+        for n in 0 ..< planeNodeReferences.count {
+            guard n < planeNodeReferences.count, let pointer = planeNodeReferences.pointer(at: n) else { return }
+            let planeNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+            
+            planeNode.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.7)
+            let duration: TimeInterval = 3
+            
+            let action = SCNAction.customAction(duration: duration, action: { (node, elapsedTime) in
+                
+                var percentage = CGFloat(0)
+                if elapsedTime > 1.00 {
+                    percentage = (elapsedTime - 1) / CGFloat(duration)
+                }
+                
+                node.geometry?.firstMaterial?.diffuse.contents = self.animateColor(percentage: CGFloat(percentage))
+            })
+            planeNode.runAction(action)
+        }
+    
+    }
+    
+    func animateColor(percentage: CGFloat) -> UIColor {
+        let color = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.7 + (0.0 - 0.7) * percentage)
+        return color
+    }
+    
     
     // MARK: OTHER VARIABLES
     // ==============================================================
     
     var posterNodeRefereneces = NSPointerArray.weakObjects() // Array of added posters.
     var posterImageNameArray: [String] = []
-    var anchorNodeReferences = NSPointerArray.weakObjects()
+    var planeNodeReferences = NSPointerArray.weakObjects()
     var selectedPoster: Int = -1 // Keep track of selected poster.
+    var hasDetectedPlane: Bool = false //
+    var numPlanesDetected: Int = 0
+    var showingInvalid: Bool = false
     
     // MARK: FUNCTIONS
     // ==============================================================
@@ -67,12 +101,33 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         // Hide clear button because it doesn't work rightn ow
         makeVertical.isHidden = true
         
+        // Finding Plane
+        findingPlaneIndicator.hidesWhenStopped = true
+        findingPlaneIndicator.startAnimating()
+        
+        findingPlaneLabel.text = "Looking for Plane..."
+        findingPlaneLabel.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        findingPlaneLabel.layer.cornerRadius = 5
+        findingPlaneLabel.layer.borderWidth = 1
+        findingPlaneLabel.layer.borderColor = UIColor.black.cgColor
+        
         // Configure button.
-        deleteButton.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+        deleteButton.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         deleteButton.layer.cornerRadius = 5
         deleteButton.layer.borderWidth = 1
         deleteButton.layer.borderColor = UIColor.black.cgColor
         deleteButton.isHidden = true
+        
+        invalidPlaneLabel.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        invalidPlaneLabel.layer.cornerRadius = 5
+        invalidPlaneLabel.layer.borderWidth = 1
+        invalidPlaneLabel.layer.borderColor = UIColor.black.cgColor
+        invalidPlaneLabel.isHidden = true
+        
+        numPlanesButton.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        numPlanesButton.layer.cornerRadius = 5
+        numPlanesButton.layer.borderWidth = 1
+        numPlanesButton.layer.borderColor = UIColor.black.cgColor
     }
     
     // Called after the completion of any drawing and animations involved in the
@@ -87,7 +142,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         configuration.planeDetection = .vertical
         sceneView.session.run(configuration)
         sceneView.delegate = self
-        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        
+        // Start Detecting Plane Animation
 
         // Add a tap gesture recognizer to add or deselect posters.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CameraViewController.didTapScene(withGestureRecognizer:)))
@@ -120,6 +176,25 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         // Get the plane anchor.
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
+        // Disable the Looking for Plane Animation
+        hasDetectedPlane = true
+        DispatchQueue.main.async {
+            self.numPlanesDetected = self.numPlanesDetected + 1
+            self.numPlanesButton.setTitle("Planes: \(self.numPlanesDetected)", for: .normal)
+            self.findingPlaneIndicator.stopAnimating()
+            self.findingPlaneIndicator.isHidden = true
+            self.findingPlaneLabel.isHidden = false
+            self.findingPlaneLabel.alpha = 1.0
+            self.findingPlaneLabel.text = "Plane Found!"
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseOut, animations: {
+                self.findingPlaneLabel.alpha = 0.0
+            }, completion: { (isCompleted) in
+                self.findingPlaneLabel.isHidden = true
+            })
+        }
+        
         // Declare the extent (size) of the anchor plane.
         let width = CGFloat(planeAnchor.extent.x)
         let height = CGFloat(planeAnchor.extent.z)
@@ -140,8 +215,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         node.addChildNode(planeNode)
         
         // Add the node to the reference array
-        let pointer = Unmanaged.passUnretained(node).toOpaque()
-        anchorNodeReferences.addPointer(pointer)
+        let pointer = Unmanaged.passUnretained(planeNode).toOpaque()
+        planeNodeReferences.addPointer(pointer)
     }
     
     // This function is called when a plane anchor has been updated.
@@ -149,36 +224,33 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     //          to the plane anchor.
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         
-        print(anchorNodeReferences.count)
-        
         // Get the plane anchor, as well as its plane node and geometry.
-        guard let planeAnchor = anchor as?  ARPlaneAnchor,
-            let planeNode = node.childNodes.first,
-            let plane = planeNode.geometry as? SCNPlane
-            else { return }
-    
-        // Update the extent (size) of the plane node's geometry.
-        let width = CGFloat(planeAnchor.extent.x)
-        let height = CGFloat(planeAnchor.extent.z)
-        plane.width = width
-        plane.height = height
-         
-        // Calculate the position for the new plane visualizatino.
-        let x = CGFloat(planeAnchor.center.x)
-        let y = CGFloat(planeAnchor.center.y)
-        let z = CGFloat(planeAnchor.center.z)
+            guard let planeAnchor = anchor as?  ARPlaneAnchor,
+                let planeNode = node.childNodes.first,
+                let plane = planeNode.geometry as? SCNPlane
+                else { return }
         
-        // Update the position of the plane visualization.
-        planeNode.position = SCNVector3(x, y, z)
+            // Update the extent (size) of the plane node's geometry.
+            let width = CGFloat(planeAnchor.extent.x)
+            let height = CGFloat(planeAnchor.extent.z)
+            plane.width = width
+            plane.height = height
+             
+            // Calculate the position for the new plane visualizatino.
+            let x = CGFloat(planeAnchor.center.x)
+            let y = CGFloat(planeAnchor.center.y)
+            let z = CGFloat(planeAnchor.center.z)
+            
+            // Update the position of the plane visualization.
+            planeNode.position = SCNVector3(x, y, z)
+        
     }
     
-    // This function is called when an anchor node is no longer recognized.
-    //      1. Delete the plane node that is the child of the anchor node.
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        guard let _ = anchor as?  ARPlaneAnchor,
-            let planeNode = node.childNodes.first
-            else { return }
-        planeNode.removeFromParentNode()
+        DispatchQueue.main.async {
+            self.numPlanesDetected = self.numPlanesDetected + 1
+            self.numPlanesButton.setTitle("Planes: \(self.numPlanesDetected)", for: .normal)
+        }
     }
     
     // Rotate a poster after it's been selected.
@@ -447,7 +519,21 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         
                         
                     } else {
-                        print("Not on valid plane!")
+                        if (!showingInvalid) {
+                            DispatchQueue.main.async {
+                                self.showingInvalid = true
+                                self.invalidPlaneLabel.isHidden = false
+                                self.invalidPlaneLabel.alpha = 1.0
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseOut, animations: {
+                                    self.invalidPlaneLabel.alpha = 0.0
+                                }, completion: { (isCompleted) in
+                                    self.invalidPlaneLabel.isHidden = true
+                                    self.showingInvalid = false
+                                })
+                            }
+                        }
                     }
                 }
             }
@@ -460,6 +546,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
 
 extension UIColor {
     open class var transparentLightBlue: UIColor {
-        return UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.5)
+        return UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.0)
     }
 }
