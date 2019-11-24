@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,17 @@
 		D9A8A03D2380892F00E82AD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03C2380892F00E82AD4 /* ViewController.swift */; };
 		D9A8A0402380893700E82AD4 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03E2380893700E82AD4 /* Path.swift */; };
 		D9A8A0412380893700E82AD4 /* PathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03F2380893700E82AD4 /* PathView.swift */; };
+		D9EC4543238B39B8003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453C238B39B7003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg */; };
+		D9EC4544238B39B8003B0B70 /* 3012666-XDCJOFJE-6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453D238B39B7003B0B70 /* 3012666-XDCJOFJE-6.jpg */; };
+		D9EC4545238B39B8003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453E238B39B7003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg */; };
+		D9EC4546238B39B8003B0B70 /* 1280px-van-gogh-starry-night-google-art-project.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453F238B39B7003B0B70 /* 1280px-van-gogh-starry-night-google-art-project.jpg */; };
+		D9EC4547238B39B8003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC4540238B39B7003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg */; };
+		D9EC4549238B39B8003B0B70 /* images.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC4542238B39B7003B0B70 /* images.jpg */; };
+		D9EC454F238B39E8003B0B70 /* savedPosterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC454A238B39E8003B0B70 /* savedPosterCell.swift */; };
+		D9EC4550238B39E8003B0B70 /* DecodableStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC454B238B39E8003B0B70 /* DecodableStructs.swift */; };
+		D9EC4551238B39E8003B0B70 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC454C238B39E8003B0B70 /* ExploreViewController.swift */; };
+		D9EC4552238B39E8003B0B70 /* posterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC454D238B39E8003B0B70 /* posterCell.swift */; };
+		D9EC4555238B3E00003B0B70 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC4554238B3E00003B0B70 /* SecondViewController.swift */; };
 		ECABC4E4A31DA4B39D43A61B /* Pods_ARAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A1BEBA9484192F33ABF0AA /* Pods_ARAPP.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +65,17 @@
 		D9A8A03C2380892F00E82AD4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D9A8A03E2380893700E82AD4 /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		D9A8A03F2380893700E82AD4 /* PathView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathView.swift; sourceTree = "<group>"; };
+		D9EC453C238B39B7003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 32313766_1988769137862071_3751119703548887040_n.jpg; sourceTree = "<group>"; };
+		D9EC453D238B39B7003B0B70 /* 3012666-XDCJOFJE-6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "3012666-XDCJOFJE-6.jpg"; sourceTree = "<group>"; };
+		D9EC453E238B39B7003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "oil-painting-underwater-paintings-isabel-emrich-11.jpg"; sourceTree = "<group>"; };
+		D9EC453F238B39B7003B0B70 /* 1280px-van-gogh-starry-night-google-art-project.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1280px-van-gogh-starry-night-google-art-project.jpg"; sourceTree = "<group>"; };
+		D9EC4540238B39B7003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "romantic-walk-home-decor-abstract-oil-painting.jpg"; sourceTree = "<group>"; };
+		D9EC4542238B39B7003B0B70 /* images.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images.jpg; sourceTree = "<group>"; };
+		D9EC454A238B39E8003B0B70 /* savedPosterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = savedPosterCell.swift; sourceTree = "<group>"; };
+		D9EC454B238B39E8003B0B70 /* DecodableStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodableStructs.swift; sourceTree = "<group>"; };
+		D9EC454C238B39E8003B0B70 /* ExploreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		D9EC454D238B39E8003B0B70 /* posterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = posterCell.swift; sourceTree = "<group>"; };
+		D9EC4554238B3E00003B0B70 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		FCD2354ABD146C3F2184F458 /* Pods-ARAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARAPP.debug.xcconfig"; path = "Target Support Files/Pods-ARAPP/Pods-ARAPP.debug.xcconfig"; sourceTree = "<group>"; };
 		FF0919191B409BB5A105BA8A /* Pods_ARAPPTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARAPPTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -95,7 +117,6 @@
 				CE6C41F4225607D29E3B0A74 /* Pods-ARAPPTests.debug.xcconfig */,
 				87EABBE5591F426A365CB3DE /* Pods-ARAPPTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -113,6 +134,7 @@
 			children = (
 				D9346562236CE89200412F90 /* ARAPP */,
 				D9346577236CE89300412F90 /* ARAPPTests */,
+				D9EC453B238B39B7003B0B70 /* PosterImages */,
 				D9346561236CE89200412F90 /* Products */,
 				C83046BC41931C151FCA6C23 /* Pods */,
 				3BBBFE096FEB16B77AE4FF37 /* Frameworks */,
@@ -137,6 +159,11 @@
 				D934659C236D260B00412F90 /* CameraViewController.swift */,
 				D9346567236CE89200412F90 /* Main.storyboard */,
 				D9A8A03C2380892F00E82AD4 /* ViewController.swift */,
+				D9EC454B238B39E8003B0B70 /* DecodableStructs.swift */,
+				D9EC454C238B39E8003B0B70 /* ExploreViewController.swift */,
+				D9EC454D238B39E8003B0B70 /* posterCell.swift */,
+				D9EC4554238B3E00003B0B70 /* SecondViewController.swift */,
+				D9EC454A238B39E8003B0B70 /* savedPosterCell.swift */,
 				D9A8A03E2380893700E82AD4 /* Path.swift */,
 				D9A8A03F2380893700E82AD4 /* PathView.swift */,
 				D934656A236CE89300412F90 /* Assets.xcassets */,
@@ -153,6 +180,19 @@
 				D934657A236CE89300412F90 /* Info.plist */,
 			);
 			path = ARAPPTests;
+			sourceTree = "<group>";
+		};
+		D9EC453B238B39B7003B0B70 /* PosterImages */ = {
+			isa = PBXGroup;
+			children = (
+				D9EC453C238B39B7003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg */,
+				D9EC453D238B39B7003B0B70 /* 3012666-XDCJOFJE-6.jpg */,
+				D9EC453E238B39B7003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg */,
+				D9EC453F238B39B7003B0B70 /* 1280px-van-gogh-starry-night-google-art-project.jpg */,
+				D9EC4540238B39B7003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg */,
+				D9EC4542238B39B7003B0B70 /* images.jpg */,
+			);
+			path = PosterImages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,11 +279,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9EC4543238B39B8003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg in Resources */,
+				D9EC4545238B39B8003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg in Resources */,
+				D9EC4546238B39B8003B0B70 /* 1280px-van-gogh-starry-night-google-art-project.jpg in Resources */,
 				D934656E236CE89300412F90 /* LaunchScreen.storyboard in Resources */,
+				D9EC4544238B39B8003B0B70 /* 3012666-XDCJOFJE-6.jpg in Resources */,
+				D9EC4547238B39B8003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg in Resources */,
 				D9099FB0236D4E3000A0BBFB /* ship.png in Resources */,
 				D934656B236CE89300412F90 /* Assets.xcassets in Resources */,
 				D9099FAF236D4E3000A0BBFB /* ship.scn in Resources */,
 				D9346569236CE89200412F90 /* Main.storyboard in Resources */,
+				D9EC4549238B39B8003B0B70 /* images.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,9 +371,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9EC4555238B3E00003B0B70 /* SecondViewController.swift in Sources */,
+				D9EC4551238B39E8003B0B70 /* ExploreViewController.swift in Sources */,
 				D9346566236CE89200412F90 /* AppContainer.swift in Sources */,
+				D9EC454F238B39E8003B0B70 /* savedPosterCell.swift in Sources */,
 				D9A8A0412380893700E82AD4 /* PathView.swift in Sources */,
 				D9346564236CE89200412F90 /* AppDelegate.swift in Sources */,
+				D9EC4550238B39E8003B0B70 /* DecodableStructs.swift in Sources */,
+				D9EC4552238B39E8003B0B70 /* posterCell.swift in Sources */,
 				D9A8A03D2380892F00E82AD4 /* ViewController.swift in Sources */,
 				D9A8A0402380893700E82AD4 /* Path.swift in Sources */,
 				D934659D236D260B00412F90 /* CameraViewController.swift in Sources */,

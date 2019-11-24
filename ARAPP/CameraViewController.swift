@@ -23,6 +23,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     @IBOutlet weak var findingPlaneIndicator: UIActivityIndicatorView!
     @IBOutlet weak var numPlanesButton: UIButton!
     @IBOutlet weak var invalidPlaneLabel: UILabel!
+    @IBOutlet weak var widthLabel: UILabel!
+    @IBOutlet weak var lengthLabel: UILabel!
     
     // MARK: ACTIONS
     // ==============================================================
@@ -40,6 +42,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         selectedPoster = -1
         deleteButton.isHidden = true
         makeVertical.isHidden = true
+        widthLabel.isHidden = true
+        lengthLabel.isHidden = true
         
     }
     @IBAction func makeVertical(_ sender: Any) {
@@ -108,6 +112,19 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         findingPlaneLabel.layer.borderWidth = 1
         findingPlaneLabel.layer.borderColor = UIColor.black.cgColor
         
+        // Width n Length text
+        widthLabel.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        widthLabel.layer.cornerRadius = 5
+        widthLabel.layer.borderWidth = 1
+        widthLabel.layer.borderColor = UIColor.black.cgColor
+        widthLabel.isHidden = true
+        
+        lengthLabel.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        lengthLabel.layer.cornerRadius = 5
+        lengthLabel.layer.borderWidth = 1
+        lengthLabel.layer.borderColor = UIColor.black.cgColor
+        lengthLabel.isHidden = true
+        
         // Configure button.
         makeVertical.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         makeVertical.layer.cornerRadius = 5
@@ -144,6 +161,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .vertical
         sceneView.session.run(configuration)
+        sceneView.session.delegate = self
         sceneView.delegate = self
         
         // Start Detecting Plane Animation
@@ -292,6 +310,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         }
     }
     
+    
     // Resize a poster after it's been selected.
     @objc func didPinchScene(withGestureRecognizer recognizer: UIPinchGestureRecognizer) {
         if (selectedPoster != -1) {
@@ -305,6 +324,14 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 
                 // Scale the selected poster.
                 selectedNode.scale = SCNVector3(x: Float(recognizer.scale) * selectedNode.scale.x, y: Float(recognizer.scale) * selectedNode.scale.y, z: Float(recognizer.scale) * selectedNode.scale.z)
+                
+                // Update width and length text
+                let nodeWidth = (selectedNode.boundingBox.max.x - selectedNode.boundingBox.min.x) * 100 * selectedNode.scale.x
+                let nodeWidthRounded = String(format: "%.1f", nodeWidth)
+                let nodeLength = (selectedNode.boundingBox.max.y - selectedNode.boundingBox.min.y) * 100 * selectedNode.scale.y
+                let lengthWidthRounded = String(format: "%.1f", nodeLength)
+                widthLabel.text = "Width: \(nodeWidthRounded)"
+                lengthLabel.text = "Length: \(lengthWidthRounded)"
                 
                 // Reset the gesture recognizer's scale property.
                 recognizer.scale = 1.0
@@ -398,6 +425,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             // Show delete button.
                             deleteButton.isHidden = false
                             makeVertical.isHidden = false
+                            widthLabel.isHidden = false
+                            lengthLabel.isHidden = false
                             
                             // Update material for old object.
                             if (selectedPoster != -1) {
@@ -436,7 +465,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             highlightMat.emission.contents = UIColor.yellow.withAlphaComponent(0.1)
                             hit.node.geometry?.materials[0] = highlightMat
                             
-                            makeVertical.isHidden = false
+                            // Width n Length stuff
+                            let nodeWidth = (hit.node.boundingBox.max.x - hit.node.boundingBox.min.x) * 100 * hit.node.scale.x
+                            let nodeWidthRounded = String(format: "%.1f", nodeWidth)
+                            let nodeLength = (hit.node.boundingBox.max.y - hit.node.boundingBox.min.y) * 100 * hit.node.scale.y
+                            let lengthWidthRounded = String(format: "%.1f", nodeLength)
+                            widthLabel.text = "Width: \(nodeWidthRounded)"
+                            lengthLabel.text = "Length: \(lengthWidthRounded)"
                             
                             // Store the index as the selected poster.
                             selectedPoster = n
@@ -494,6 +529,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     // Hide delete button.
                     deleteButton.isHidden = true
                     makeVertical.isHidden = true
+                    widthLabel.isHidden = true
+                    lengthLabel.isHidden = true
                     
                     // Unselect posters.
                     selectedPoster = -1
@@ -503,9 +540,17 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     
                     if let hit = hitList.first {
                         
-                        let posterGeo = SCNPlane(width: 0.05, height: 0.1)
+                        var posterGeo = SCNPlane(width: 0.05, height: 0.1)
                         let posterMat = SCNMaterial()
+                        
                         if let data = UserDefaults.standard.data(forKey: "drawings"), let image = UIImage(data: data) {
+                            
+                            let multFactor = image.size.height / 10
+                            let widthMulted = image.size.width / multFactor
+                            
+                            posterGeo = SCNPlane(width: widthMulted / 100, height: 0.1)
+                            print(widthMulted)
+                            
                             posterMat.diffuse.contents = image
                             posterImageNameArray.append("drawings")
                         } else {
