@@ -34,21 +34,19 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         posterNodeRefereneces.removePointer(at: selectedPoster)
         posterImageNameArray.remove(at: selectedPoster)
         selectedPosterNode.removeFromParentNode()
+        posterAnglesArray.remove(at: selectedPoster)
         
         // Take care of deselect nodes.
         selectedPoster = -1
         deleteButton.isHidden = true
+        makeVertical.isHidden = true
         
-        for child in sceneView.scene.rootNode.childNodes {
-            print(child.childNodes.count)
-        }
     }
     @IBAction func makeVertical(_ sender: Any) {
         // commit testing
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
         let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
-        let action = SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0)
-        selectedNode.runAction(action)
+        selectedNode.eulerAngles = posterAnglesArray[selectedPoster]
     }
     @IBAction func numPlanesAction(_ sender: Any) {
         
@@ -84,6 +82,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     
     var posterNodeRefereneces = NSPointerArray.weakObjects() // Array of added posters.
     var posterImageNameArray: [String] = []
+    var posterAnglesArray: [SCNVector3] = []
     var planeNodeReferences = NSPointerArray.weakObjects()
     var selectedPoster: Int = -1 // Keep track of selected poster.
     var hasDetectedPlane: Bool = false //
@@ -98,8 +97,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Hide clear button because it doesn't work rightn ow
-        makeVertical.isHidden = true
         
         // Finding Plane
         findingPlaneIndicator.hidesWhenStopped = true
@@ -112,6 +109,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         findingPlaneLabel.layer.borderColor = UIColor.black.cgColor
         
         // Configure button.
+        makeVertical.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        makeVertical.layer.cornerRadius = 5
+        makeVertical.layer.borderWidth = 1
+        makeVertical.layer.borderColor = UIColor.black.cgColor
+        makeVertical.isHidden = true
+        
         deleteButton.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         deleteButton.layer.cornerRadius = 5
         deleteButton.layer.borderWidth = 1
@@ -201,7 +204,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let plane = SCNPlane(width: width, height: height)
         
         // Add a material to the plane.
-        plane.materials.first?.diffuse.contents = UIColor.transparentLightBlue
+        plane.materials.first?.diffuse.contents = UIColor.planeColor
         
         // Create a plane geometry to accompany the anchor.
         let planeNode = SCNNode(geometry: plane)
@@ -210,6 +213,20 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         let z = CGFloat(planeAnchor.center.z)
         planeNode.position = SCNVector3(x, y, z)
         planeNode.eulerAngles.x = -.pi / 2
+        
+        // Animate plane geo
+        planeNode.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.7)
+        let duration: TimeInterval = 3
+        let action = SCNAction.customAction(duration: duration, action: { (node, elapsedTime) in
+            
+            var percentage = CGFloat(0)
+            if elapsedTime > 1.00 {
+                percentage = (elapsedTime - 1) / CGFloat(duration)
+            }
+            
+            node.geometry?.firstMaterial?.diffuse.contents = self.animateColor(percentage: CGFloat(percentage))
+        })
+        planeNode.runAction(action)
         
         // Add the plane to the anchor.
         node.addChildNode(planeNode)
@@ -353,9 +370,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get list of objects 'hit' at that location.
             // Assume we haven't found any posters at that location.
             let hitList = sceneView.hitTest(location, options: [SCNHitTestOption.searchMode : 1])
-            print("LONG")
-            
-            print(hitList.count)
             
             // Iterate through the list of objects 'hit' and check to see if
             // any of them are posters.
@@ -443,9 +457,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
             // Get list of objects 'hit' at that location.
             // Assume we haven't found any posters at that location.
             let hitList = sceneView.hitTest(location, options: [SCNHitTestOption.searchMode : 1])
-            print("TAP")
-            print(hitList.count)
-            print(posterNodeRefereneces.count)
             var foundPoster = false
             
             // Iterate through the list of objects 'hit' and check to see if
@@ -507,6 +518,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         let posterNode = SCNNode(geometry: posterGeo)
                         posterNode.transform = SCNMatrix4(hit.anchor!.transform)
                         posterNode.eulerAngles = SCNVector3(posterNode.eulerAngles.x + (-Float.pi / 2), posterNode.eulerAngles.y, posterNode.eulerAngles.z)
+                        posterAnglesArray.append(posterNode.eulerAngles)
                         posterNode.position = SCNVector3(hit.worldTransform.columns.3.x, hit.worldTransform.columns.3.y, hit.worldTransform.columns.3.z)
                     
                         // Add Poster!
@@ -545,7 +557,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
 }
 
 extension UIColor {
-    open class var transparentLightBlue: UIColor {
+    open class var planeColor: UIColor {
         return UIColor(red: 90/255, green: 200/255, blue: 250/255, alpha: 0.0)
     }
 }
