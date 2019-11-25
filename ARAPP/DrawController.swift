@@ -44,6 +44,8 @@ class DrawController: UIViewController {
         myCanvas.linesUndone.removeAll()
         myCanvas.words.removeAll()
         myCanvas.wordsUndone.removeAll()
+        myCanvas.lineOrWord.removeAll()
+        myCanvas.lineOrWordUndone.removeAll()
     }
     
     @IBAction func undoButtonAction(_ sender: Any) {
@@ -162,7 +164,7 @@ class DrawController: UIViewController {
         let addAction = UIAlertAction(title: "Add", style: .default, handler: { alert -> Void in
             let inputText = textController.textFields![0] as UITextField
             if (!inputText.text!.isEmpty) {
-                self.myCanvas.words.append(Words(text: inputText.text!, color: self.selectedColor, fontSize: Int(self.penThickness.value * 2), coordinates: self.textPoint!))
+                self.myCanvas.words.append(Words(text: inputText.text!, color: self.selectedColor, fontSize: Int(self.penThickness.value * 2), coordinates: self.textPoint!, opacity: CGFloat(self.penOpacity!.value)))
                 self.myCanvas.lineOrWord.append("word")
             }
         })
@@ -181,6 +183,9 @@ class DrawController: UIViewController {
         myCanvas.linesUndone.removeAll()
         myCanvas.wordsUndone.removeAll()
         myCanvas.lineOrWordUndone.removeAll()
+        if (!amPuttingText) {
+            myCanvas.lineOrWord.append("line")
+        }
     }
     
     func fingerMove(touchPoint: CGPoint) {
@@ -192,7 +197,6 @@ class DrawController: UIViewController {
         if (!amPuttingText) {
             currentLine.append(touchPoint)
             myCanvas.lines[myCanvas.lines.count - 1].points = currentLine
-            myCanvas.lineOrWord.append("line")
         } else {
             textPoint = touchPoint
             showAddText()
@@ -201,20 +205,20 @@ class DrawController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (!amPuttingText) {
-            guard let touchPoint = touches.first?.location(in: view) else { return }
+            guard let touchPoint = touches.first?.location(in: myCanvas) else { return }
             fingerDown(touchPoint: touchPoint)
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (!amPuttingText) {
-            guard let touchPoint = touches.first?.location(in: view) else { return }
+            guard let touchPoint = touches.first?.location(in: myCanvas) else { return }
             fingerMove(touchPoint: touchPoint)
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touchPoint = touches.first?.location(in: view) else { return }
+        guard let touchPoint = touches.first?.location(in: myCanvas) else { return }
         fingerLift(touchPoint: touchPoint)
     }
     
@@ -222,16 +226,16 @@ class DrawController: UIViewController {
         switch recognizer.state {
         case .began:
             if (!amPuttingText) {
-                let touchPoint = recognizer.location(in: view)
+                let touchPoint = recognizer.location(in: myCanvas)
                 fingerDown(touchPoint: touchPoint)
             }
         case .changed:
             if (!amPuttingText) {
-                let touchPoint = recognizer.location(in: view)
+                let touchPoint = recognizer.location(in: myCanvas)
                 fingerMove(touchPoint: touchPoint)
             }
         case .ended:
-            let touchPoint = recognizer.location(in: view)
+            let touchPoint = recognizer.location(in: myCanvas)
             fingerLift(touchPoint: touchPoint)
         default:
             print("default")

@@ -44,34 +44,43 @@ class CanvasView: UIView {
     
     // Custom draw function. Draw every word in the word array
     // and draw every line in the line array.
-    override func draw(_ rect: CGRect) {
+    override func draw(_ rect: CGRect) { // BREAK
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .left
-        for word in words {
-            word.text.draw(with: CGRect(x: word.coordinates.x, y: word.coordinates.y, width: 500, height: 500), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: UIFont(name: "Arial", size: CGFloat(word.fontSize))!, NSAttributedString.Key.paragraphStyle: paragraph, NSAttributedString.Key.foregroundColor: word.color], context: nil)
-        }
-        for line in lines {
-            line.color.setStroke()
-            line.color.setFill()
-            let path = createQuadPath(points: line.points)
-            if (line.points.count < 3) {
-                path.addArc(withCenter: line.points[0], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
-                path.fill(with: .normal, alpha: 1)
-            } else {
-                path.lineCapStyle = .round
-                path.lineJoinStyle = .round
-                path.lineWidth = line.width
-                path.stroke(with: .normal, alpha: 1)
-            }
-            if line.points.count > 1 {
-                for i in 1 ..< (line.points.count - 1) {
-                    if ((line.points[i].y < line.points[i-1].y) && (line.points[i].y < line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].y > line.points[i-1].y) && (line.points[i].y > line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].x < line.points[i-1].x) && (line.points[i].x < line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) ||
-                        ((line.points[i].x > line.points[i-1].x) && (line.points[i].x > line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) {
-                        let newpath = UIBezierPath()
-                        newpath.addArc(withCenter: line.points[i], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
-                        newpath.fill()
+        
+        var lineCounter = 0
+        var wordCounter = 0
+        
+        for wordOrLine in lineOrWord {
+            if (wordOrLine == "line") {
+                let line = lines[lineCounter]
+                line.color.setStroke()
+                line.color.setFill()
+                let path = createQuadPath(points: line.points)
+                if (line.points.count < 3) {
+                    path.addArc(withCenter: line.points[0], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
+                    path.fill(with: .normal, alpha: line.opacity)
+                } else {
+                    path.lineCapStyle = .round
+                    path.lineJoinStyle = .round
+                    path.lineWidth = line.width
+                    path.stroke(with: .normal, alpha: line.opacity)
+                }
+                if line.points.count > 1 {
+                    for i in 1 ..< (line.points.count - 1) {
+                        if ((line.points[i].y < line.points[i-1].y) && (line.points[i].y < line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].y > line.points[i-1].y) && (line.points[i].y > line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].x < line.points[i-1].x) && (line.points[i].x < line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) ||
+                            ((line.points[i].x > line.points[i-1].x) && (line.points[i].x > line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) {
+                            let newpath = UIBezierPath()
+                            newpath.addArc(withCenter: line.points[i], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
+                            newpath.fill(with: .normal, alpha: line.opacity)
+                        }
                     }
                 }
+                lineCounter = lineCounter + 1
+            } else {
+                let word = words[wordCounter]
+                word.text.draw(with: CGRect(x: word.coordinates.x, y: word.coordinates.y, width: 500, height: 500), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: UIFont(name: "Arial", size: CGFloat(word.fontSize))!, NSAttributedString.Key.paragraphStyle: paragraph, NSAttributedString.Key.foregroundColor: word.color.withAlphaComponent(word.opacity)], context: nil)
+                wordCounter = wordCounter + 1
             }
         }
     }

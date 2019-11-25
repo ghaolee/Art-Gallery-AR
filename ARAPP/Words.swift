@@ -14,4 +14,5 @@ struct Words {
     var color: UIColor
     var fontSize: Int
     var coordinates: CGPoint
+    var opacity: CGFloat
 }
