@@ -70,23 +70,17 @@ class DrawController: UIViewController {
     }
     
     @IBAction func saveImage(_ sender: Any) {
-        // print("save button pressed")
-        //UIAlert to ask if you want to save
-        let saveAlert = UIAlertController(title: "Save", message: "Save this drawing?", preferredStyle: .alert)
+        let saveAlert = UIAlertController(title: "Save", message: "Save This Drawing?", preferredStyle: .alert)
         saveAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        saveAlert.addAction(UIAlertAction(title:"Save", style: .default))
-        //https://stackoverflow.com/questions/28503393/how-to-save-a-coregraphics-drawing-in-swift
-        let image = UIGraphicsImageRenderer(bounds: myCanvas.bounds).image { _ in
-            myCanvas.drawHierarchy(in: myCanvas.bounds, afterScreenUpdates: true)
-        }
-        // print(image)
-        if let data = image.pngData() {
-            
-            UserDefaults.standard.set(data, forKey: "drawings")
-        }
+        saveAlert.addAction(UIAlertAction(title:"Save", style: .default, handler: { alert -> Void in
+            let image = UIGraphicsImageRenderer(bounds: self.myCanvas.bounds).image { _ in
+                self.myCanvas.drawHierarchy(in: self.myCanvas.bounds, afterScreenUpdates: true)
+            }
+            if let data = image.pngData() {
+                UserDefaults.standard.set(data, forKey: "drawings")
+            }
+        }))
         self.present(saveAlert, animated: true, completion: nil)
-        // savedImage.image = image
-
     }
     
     // Other Functions

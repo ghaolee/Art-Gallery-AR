@@ -42,12 +42,22 @@ class CanvasView: UIView {
             let path = createQuadPath(points: line.points)
             if (line.points.count < 3) {
                 path.addArc(withCenter: line.points[0], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
-                path.fill(with: .normal, alpha: line.opacity)
+                path.fill(with: .normal, alpha: 1)
             } else {
                 path.lineCapStyle = .round
                 path.lineJoinStyle = .round
                 path.lineWidth = line.width
-                path.stroke(with: .normal, alpha: line.opacity)
+                path.stroke(with: .normal, alpha: 1)
+            }
+            if line.points.count > 1 {
+                for i in 1 ..< (line.points.count - 1) {
+                    if ((line.points[i].y < line.points[i-1].y) && (line.points[i].y < line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].y > line.points[i-1].y) && (line.points[i].y > line.points[i+1].y) && (line.points[i-1].x == line.points[i].x) && (line.points[i].x == line.points[i + 1].x)) || ((line.points[i].x < line.points[i-1].x) && (line.points[i].x < line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) ||
+                        ((line.points[i].x > line.points[i-1].x) && (line.points[i].x > line.points[i+1].x) && (line.points[i-1].y == line.points[i].y) && (line.points[i].y == line.points[i + 1].y)) {
+                        let newpath = UIBezierPath()
+                        newpath.addArc(withCenter: line.points[i], radius: (line.width / 2), startAngle: 0, endAngle: CGFloat(Float.pi * 2), clockwise: true)
+                        newpath.fill()
+                    }
+                }
             }
         }
     }
