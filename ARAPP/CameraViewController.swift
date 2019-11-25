@@ -283,7 +283,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
         DispatchQueue.main.async {
-            self.numPlanesDetected = self.numPlanesDetected + 1
+            self.numPlanesDetected = self.numPlanesDetected - 1
             self.numPlanesButton.setTitle("Planes: \(self.numPlanesDetected)", for: .normal)
         }
     }

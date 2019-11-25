@@ -19,6 +19,15 @@ class CanvasView: UIView {
     }
     var linesUndone: [Line] = []
     
+    var words: [Words] = [] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var wordsUndone: [Words] = []
+    var lineOrWord: [String] = []
+    var lineOrWordUndone: [String] = []
+    
     // Initialization
     // =================================
     override init(frame: CGRect) {
@@ -36,6 +45,11 @@ class CanvasView: UIView {
     // Custom draw function. Draw every word in the word array
     // and draw every line in the line array.
     override func draw(_ rect: CGRect) {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .left
+        for word in words {
+            word.text.draw(with: CGRect(x: word.coordinates.x, y: word.coordinates.y, width: 500, height: 500), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: UIFont(name: "Arial", size: CGFloat(word.fontSize))!, NSAttributedString.Key.paragraphStyle: paragraph, NSAttributedString.Key.foregroundColor: word.color], context: nil)
+        }
         for line in lines {
             line.color.setStroke()
             line.color.setFill()

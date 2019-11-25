@@ -11,8 +11,6 @@ import ColorSlider
 
 class DrawController: UIViewController {
     
-    // Variables
-    // =================================
     
     // Other globals
     var myCanvas: CanvasView!
@@ -21,7 +19,6 @@ class DrawController: UIViewController {
     
     // Text Modal
     var amPuttingText = false
-    var typingText = false
     var textPoint: CGPoint?
     
     // Slider Stuff
@@ -30,8 +27,6 @@ class DrawController: UIViewController {
     @IBOutlet weak var penThickness: UISlider!
     @IBOutlet weak var penOpacity: UISlider!
     
-    // Outlets
-    // =================================
     
     // Swiping UIViews
     @IBOutlet weak var drawView: UIView!
@@ -39,36 +34,68 @@ class DrawController: UIViewController {
     @IBOutlet weak var toolsView: UIView!
     
     // Default requirements
-    // @IBOutlet weak var strokeWidthSliderOutlet: UISlider!
     @IBOutlet weak var clearButtonOutlet: UIButton!
     @IBOutlet weak var undoButtonOutlet: UIButton!
     @IBOutlet weak var redoButtonOutlet: UIButton!
+    @IBOutlet weak var brushOrText: UISegmentedControl!
     
-    // Actions
-    // =================================
-    
-    // Clear the screen of lines and text.
     @IBAction func clearButtonAction(_ sender: Any) {
         myCanvas.lines.removeAll()
         myCanvas.linesUndone.removeAll()
+        myCanvas.words.removeAll()
+        myCanvas.wordsUndone.removeAll()
     }
     
-    // If there are elements drawn on the screen, remove the most recent addition
-    // and add it to a temporary redo list.
     @IBAction func undoButtonAction(_ sender: Any) {
-        if (myCanvas.lines.count > 0) {
-            myCanvas.linesUndone.append(myCanvas.lines.popLast()!)
+        if (myCanvas.lineOrWord.count > 0) {
+            let which = myCanvas.lineOrWord.popLast()!
+            if (which == "line") {
+                if (myCanvas.lines.count > 0) {
+                    myCanvas.linesUndone.append(myCanvas.lines.popLast()!)
+                    myCanvas.lineOrWordUndone.append("line")
+                }
+            } else {
+                if (myCanvas.words.count > 0) {
+                    myCanvas.wordsUndone.append(myCanvas.words.popLast()!)
+                    myCanvas.lineOrWordUndone.append("word")
+                }
+            }
         }
     }
     
     // If there are elements in the redo list, remove the most recent addition
     // and add it back to the main elements list.
     @IBAction func redoButtonAction(_ sender: Any) {
-        if (myCanvas.linesUndone.count > 0) {
-            myCanvas.lines.append(myCanvas.linesUndone.popLast()!)
+        if (myCanvas.lineOrWordUndone.count > 0) {
+            let which = myCanvas.lineOrWordUndone.popLast()!
+            if (which == "line") {
+                if (myCanvas.linesUndone.count > 0) {
+                    myCanvas.lines.append(myCanvas.linesUndone.popLast()!)
+                    myCanvas.lineOrWord.append("line")
+                }
+            } else {
+                if (myCanvas.wordsUndone.count > 0) {
+                    myCanvas.words.append(myCanvas.wordsUndone.popLast()!)
+                    myCanvas.lineOrWord.append("word")
+                }
+            }
         }
     }
     
+    // Switch between Brush and Text
+    @IBAction func switchBrushOrText(_ sender: Any) {
+        switch brushOrText.selectedSegmentIndex {
+        case 0:
+            amPuttingText = false
+        case 1:
+            amPuttingText = true
+        default:
+            break
+        }
+    }
+    
+    // Save Image
+    // TODO -- Connect to Middle View
     @IBAction func saveImage(_ sender: Any) {
         let saveAlert = UIAlertController(title: "Save", message: "Save This Drawing?", preferredStyle: .alert)
         saveAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -106,13 +133,13 @@ class DrawController: UIViewController {
         view.bringSubviewToFront(redoButtonOutlet)
         
         // Cocoapods Color sliders
-        penColorSlider.frame = CGRect(x: 0, y: 0, width: 120, height: 20)
-        penColorSlider.center = CGPoint(x: 80 + view.frame.width/2, y: view.frame.height - 119)
+        penColorSlider.frame = CGRect(x: 0, y: 0, width: 130, height: 20)
+        penColorSlider.center = CGPoint(x: 120 + view.frame.width/2, y: view.frame.height - 108)
         penColorSlider.addTarget(self, action: #selector(penChangedColor), for: .valueChanged)
         view.addSubview(penColorSlider)
         
-        backgroundColorSlider.frame = CGRect(x: 0, y: 0, width: 120, height: 20)
-        backgroundColorSlider.center = CGPoint(x: 80 + view.frame.width/2, y: view.frame.height - 56)
+        backgroundColorSlider.frame = CGRect(x: 0, y: 0, width: 130, height: 20)
+        backgroundColorSlider.center = CGPoint(x: 120 + view.frame.width/2, y: view.frame.height - 52)
         backgroundColorSlider.addTarget(self, action: #selector(backgroundChangedColor), for: .valueChanged)
         view.addSubview(backgroundColorSlider)
     }
@@ -126,24 +153,88 @@ class DrawController: UIViewController {
         myCanvas.backgroundColor = color
     }
     
+    func showAddText() {
+        let textController = UIAlertController(title: "Add Text", message: "", preferredStyle: .alert)
+        textController.addTextField(configurationHandler: {
+            (textField: UITextField) -> Void in
+            textField.placeholder = "Enter Text"
+        })
+        let addAction = UIAlertAction(title: "Add", style: .default, handler: { alert -> Void in
+            let inputText = textController.textFields![0] as UITextField
+            if (!inputText.text!.isEmpty) {
+                self.myCanvas.words.append(Words(text: inputText.text!, color: self.selectedColor, fontSize: Int(self.penThickness.value * 2), coordinates: self.textPoint!))
+                self.myCanvas.lineOrWord.append("word")
+            }
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { alert -> Void in
+            print("nothing")
+        })
+        textController.addAction(cancelAction)
+        textController.addAction(addAction)
+        self.present(textController, animated: true, completion: nil)
+    }
+    
+    func fingerDown(touchPoint: CGPoint) {
+        currentLine.removeAll()
+        currentLine.append(touchPoint)
+        myCanvas.lines.append(Line(points: currentLine, width: CGFloat(penThickness!.value), color: selectedColor, opacity: CGFloat(penOpacity!.value)))
+        myCanvas.linesUndone.removeAll()
+        myCanvas.wordsUndone.removeAll()
+        myCanvas.lineOrWordUndone.removeAll()
+    }
+    
+    func fingerMove(touchPoint: CGPoint) {
+        currentLine.append(touchPoint)
+        myCanvas.lines[myCanvas.lines.count - 1].points = currentLine
+    }
+    
+    func fingerLift(touchPoint: CGPoint) {
+        if (!amPuttingText) {
+            currentLine.append(touchPoint)
+            myCanvas.lines[myCanvas.lines.count - 1].points = currentLine
+            myCanvas.lineOrWord.append("line")
+        } else {
+            textPoint = touchPoint
+            showAddText()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (!amPuttingText) {
+            guard let touchPoint = touches.first?.location(in: view) else { return }
+            fingerDown(touchPoint: touchPoint)
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (!amPuttingText) {
+            guard let touchPoint = touches.first?.location(in: view) else { return }
+            fingerMove(touchPoint: touchPoint)
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touchPoint = touches.first?.location(in: view) else { return }
+        fingerLift(touchPoint: touchPoint)
+    }
+    
     @objc func didPanScene(withGestureRecognizer recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            let touchPoint = recognizer.location(in: view)
-            currentLine.removeAll()
-            currentLine.append(touchPoint)
-            myCanvas.lines.append(Line(points: currentLine, width: CGFloat(penThickness!.value), color: selectedColor, opacity: CGFloat(penOpacity!.value)))
-            myCanvas.linesUndone.removeAll()
+            if (!amPuttingText) {
+                let touchPoint = recognizer.location(in: view)
+                fingerDown(touchPoint: touchPoint)
+            }
         case .changed:
-            let touchPoint = recognizer.location(in: view)
-            currentLine.append(touchPoint)
-            myCanvas.lines[myCanvas.lines.count - 1].points = currentLine
+            if (!amPuttingText) {
+                let touchPoint = recognizer.location(in: view)
+                fingerMove(touchPoint: touchPoint)
+            }
         case .ended:
             let touchPoint = recognizer.location(in: view)
-            currentLine.append(touchPoint)
-            myCanvas.lines[myCanvas.lines.count - 1].points = currentLine
+            fingerLift(touchPoint: touchPoint)
         default:
-            print("debug")
+            print("default")
         }
 
     }

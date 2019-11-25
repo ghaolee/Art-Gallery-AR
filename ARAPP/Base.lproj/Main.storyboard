@@ -224,7 +224,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not on a Valid Plane!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xu-b8-5iq">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not a Valid Plane!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xu-b8-5iq">
                                         <rect key="frame" x="85" y="508" width="204" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="TmD-sf-SU2"/>
@@ -237,7 +237,7 @@
                                         <rect key="frame" x="0.0" y="52" width="150" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="Sjh-m8-Ccj"/>
-                                            <constraint firstAttribute="width" constant="150" id="dTV-ts-3Uu"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="dTV-ts-3Uu"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -256,9 +256,9 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstItem="4xu-b8-5iq" firstAttribute="top" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="64" id="75E-3y-Xff"/>
-                                    <constraint firstAttribute="trailing" secondItem="Ec8-oU-RHs" secondAttribute="trailing" constant="85" id="8sm-Jx-JpT"/>
+                                    <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Ec8-oU-RHs" secondAttribute="trailing" constant="85" id="8sm-Jx-JpT"/>
                                     <constraint firstItem="WQC-pE-xAG" firstAttribute="top" secondItem="Gf1-Xw-7b7" secondAttribute="top" id="9G9-hH-amM"/>
-                                    <constraint firstAttribute="trailing" secondItem="4xu-b8-5iq" secondAttribute="trailing" constant="85" id="D97-EM-FtD"/>
+                                    <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="4xu-b8-5iq" secondAttribute="trailing" constant="85" id="D97-EM-FtD"/>
                                     <constraint firstAttribute="bottom" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="452" id="JOq-Z1-4wU"/>
                                     <constraint firstItem="Bqt-dw-Ued" firstAttribute="top" secondItem="hGg-Rh-X7Q" secondAttribute="bottom" constant="8" id="Jom-Kc-lIN"/>
                                     <constraint firstAttribute="trailing" secondItem="WQC-pE-xAG" secondAttribute="trailing" constant="-20" id="K20-Wl-vud"/>
@@ -354,18 +354,17 @@
                                 <rect key="frame" x="20" y="0.0" width="394" height="896"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0WN-Ao-EZS">
-                                        <rect key="frame" x="-20" y="0.0" width="414" height="725"/>
+                                        <rect key="frame" x="-20" y="0.0" width="414" height="700"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="725" id="tXX-73-FAS"/>
+                                            <constraint firstAttribute="height" constant="700" id="tXX-73-FAS"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VgV-ac-D7j">
-                                        <rect key="frame" x="-20" y="725" width="414" height="171"/>
+                                        <rect key="frame" x="-20" y="700" width="414" height="196"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WIC-GV-wq7">
-                                                <rect key="frame" x="372" y="25" width="24" height="22"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WIC-GV-wq7">
+                                                <rect key="frame" x="235" y="22" width="24" height="22"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="arrow.uturn.left.square.fill" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
@@ -375,7 +374,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dwI-hb-WvU">
-                                                <rect key="frame" x="372" y="86" width="23" height="25"/>
+                                                <rect key="frame" x="367" y="19" width="23" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="square.and.arrow.down.fill" catalog="system">
@@ -386,7 +385,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BMB-Zq-GEu">
-                                                <rect key="frame" x="372" y="55" width="24" height="23"/>
+                                                <rect key="frame" x="277" y="21" width="24" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="arrow.uturn.right.square.fill" catalog="system">
@@ -397,7 +396,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lir-AZ-Kf5">
-                                                <rect key="frame" x="371" y="119" width="24" height="26"/>
+                                                <rect key="frame" x="322" y="19" width="24" height="26"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="trash.fill" catalog="system">
@@ -407,16 +406,16 @@
                                                     <action selector="clearButtonAction:" destination="D6j-cp-sLi" eventType="touchUpInside" id="CRU-7H-vUO"/>
                                                 </connections>
                                             </button>
-                                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="1" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="liV-4Z-j7b">
-                                                <rect key="frame" x="55" y="37" width="118" height="30"/>
+                                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="liV-4Z-j7b">
+                                                <rect key="frame" x="52" y="72" width="147" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </slider>
                                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="srD-Ga-gx6">
-                                                <rect key="frame" x="55" y="96" width="118" height="30"/>
+                                                <rect key="frame" x="55" y="128" width="147" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </slider>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sna-k9-w1U">
-                                                <rect key="frame" x="194" y="37" width="28" height="28"/>
+                                                <rect key="frame" x="220" y="73" width="28" height="28"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="paintbrush.fill" catalog="system">
@@ -426,7 +425,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mns-RC-NkX">
-                                                <rect key="frame" x="27" y="40" width="17" height="23"/>
+                                                <rect key="frame" x="24" y="75" width="17" height="23"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="pencil.tip" catalog="system">
@@ -436,7 +435,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="33I-jQ-Rb9">
-                                                <rect key="frame" x="19" y="100" width="33" height="22"/>
+                                                <rect key="frame" x="19" y="132" width="33" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="eye.fill" catalog="system">
@@ -446,7 +445,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Gx-mu-iVl">
-                                                <rect key="frame" x="197" y="100" width="22" height="25"/>
+                                                <rect key="frame" x="226" y="130" width="22" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="doc.fill" catalog="system">
@@ -461,12 +460,32 @@
                                                     <constraint firstAttribute="height" constant="2" id="jbz-us-yrd"/>
                                                 </constraints>
                                             </view>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="c5n-fW-AtX">
+                                                <rect key="frame" x="19" y="19" width="181" height="32"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="181" id="s4d-u9-IoB"/>
+                                                </constraints>
+                                                <segments>
+                                                    <segment title="Brush"/>
+                                                    <segment title="Text"/>
+                                                </segments>
+                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="selectedSegmentTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <connections>
+                                                    <action selector="switchBrushOrText:" destination="D6j-cp-sLi" eventType="valueChanged" id="mu7-Oq-ad5"/>
+                                                </connections>
+                                            </segmentedControl>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="JRn-rt-4GN" firstAttribute="top" secondItem="VgV-ac-D7j" secondAttribute="top" id="Rtq-vj-1dR"/>
+                                            <constraint firstItem="c5n-fW-AtX" firstAttribute="leading" secondItem="VgV-ac-D7j" secondAttribute="leading" constant="19" id="aYn-y5-fm5"/>
                                             <constraint firstAttribute="trailing" secondItem="JRn-rt-4GN" secondAttribute="trailing" id="cIr-qT-Aek"/>
+                                            <constraint firstItem="WIC-GV-wq7" firstAttribute="leading" secondItem="c5n-fW-AtX" secondAttribute="trailing" constant="35" id="eD1-p8-SXo"/>
+                                            <constraint firstItem="WIC-GV-wq7" firstAttribute="top" secondItem="JRn-rt-4GN" secondAttribute="bottom" constant="20" id="mU8-HD-Wgf"/>
                                             <constraint firstItem="JRn-rt-4GN" firstAttribute="leading" secondItem="VgV-ac-D7j" secondAttribute="leading" id="v0g-tY-QqR"/>
+                                            <constraint firstItem="c5n-fW-AtX" firstAttribute="top" secondItem="JRn-rt-4GN" secondAttribute="bottom" constant="17" id="yo6-jk-sN5"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -492,6 +511,7 @@
                         <viewLayoutGuide key="safeArea" id="6yx-aq-QZr"/>
                     </view>
                     <connections>
+                        <outlet property="brushOrText" destination="c5n-fW-AtX" id="ky3-XI-PxT"/>
                         <outlet property="clearButtonOutlet" destination="Lir-AZ-Kf5" id="mJw-I8-pOL"/>
                         <outlet property="drawView" destination="0WN-Ao-EZS" id="OqO-M6-hxu"/>
                         <outlet property="penOpacity" destination="srD-Ga-gx6" id="tc9-iq-kGb"/>
