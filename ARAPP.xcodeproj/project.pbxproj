@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B8A381F6451D9A457BBB3E19 /* Pods_ARAPPTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF0919191B409BB5A105BA8A /* Pods_ARAPPTests.framework */; };
-		D9099FAF236D4E3000A0BBFB /* ship.scn in Resources */ = {isa = PBXBuildFile; fileRef = D9099FAD236D4E3000A0BBFB /* ship.scn */; };
-		D9099FB0236D4E3000A0BBFB /* ship.png in Resources */ = {isa = PBXBuildFile; fileRef = D9099FAE236D4E3000A0BBFB /* ship.png */; };
+		D90FF022238B541C00E6BAB4 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90FF01F238B541C00E6BAB4 /* CanvasView.swift */; };
+		D90FF023238B541C00E6BAB4 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90FF020238B541C00E6BAB4 /* Words.swift */; };
+		D90FF024238B541C00E6BAB4 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90FF021238B541C00E6BAB4 /* Line.swift */; };
+		D90FF028238B566F00E6BAB4 /* DrawController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90FF027238B566F00E6BAB4 /* DrawController.swift */; };
 		D9346564236CE89200412F90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9346563236CE89200412F90 /* AppDelegate.swift */; };
 		D9346566236CE89200412F90 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9346565236CE89200412F90 /* AppContainer.swift */; };
 		D9346569236CE89200412F90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9346567236CE89200412F90 /* Main.storyboard */; };
@@ -17,9 +19,6 @@
 		D934656E236CE89300412F90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D934656C236CE89300412F90 /* LaunchScreen.storyboard */; };
 		D9346579236CE89300412F90 /* ARAPPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9346578236CE89300412F90 /* ARAPPTests.swift */; };
 		D934659D236D260B00412F90 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D934659C236D260B00412F90 /* CameraViewController.swift */; };
-		D9A8A03D2380892F00E82AD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03C2380892F00E82AD4 /* ViewController.swift */; };
-		D9A8A0402380893700E82AD4 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03E2380893700E82AD4 /* Path.swift */; };
-		D9A8A0412380893700E82AD4 /* PathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A8A03F2380893700E82AD4 /* PathView.swift */; };
 		D9EC4543238B39B8003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453C238B39B7003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg */; };
 		D9EC4544238B39B8003B0B70 /* 3012666-XDCJOFJE-6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453D238B39B7003B0B70 /* 3012666-XDCJOFJE-6.jpg */; };
 		D9EC4545238B39B8003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D9EC453E238B39B7003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg */; };
@@ -49,8 +48,10 @@
 		87EABBE5591F426A365CB3DE /* Pods-ARAPPTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARAPPTests.release.xcconfig"; path = "Target Support Files/Pods-ARAPPTests/Pods-ARAPPTests.release.xcconfig"; sourceTree = "<group>"; };
 		C02B179CAA2B8D9D1F5348CC /* Pods-ARAPP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARAPP.release.xcconfig"; path = "Target Support Files/Pods-ARAPP/Pods-ARAPP.release.xcconfig"; sourceTree = "<group>"; };
 		CE6C41F4225607D29E3B0A74 /* Pods-ARAPPTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARAPPTests.debug.xcconfig"; path = "Target Support Files/Pods-ARAPPTests/Pods-ARAPPTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D9099FAD236D4E3000A0BBFB /* ship.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = ship.scn; sourceTree = "<group>"; };
-		D9099FAE236D4E3000A0BBFB /* ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ship.png; sourceTree = "<group>"; };
+		D90FF01F238B541C00E6BAB4 /* CanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		D90FF020238B541C00E6BAB4 /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		D90FF021238B541C00E6BAB4 /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		D90FF027238B566F00E6BAB4 /* DrawController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawController.swift; sourceTree = "<group>"; };
 		D9346560236CE89200412F90 /* ARAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9346563236CE89200412F90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9346565236CE89200412F90 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
@@ -62,9 +63,6 @@
 		D9346578236CE89300412F90 /* ARAPPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARAPPTests.swift; sourceTree = "<group>"; };
 		D934657A236CE89300412F90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D934659C236D260B00412F90 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		D9A8A03C2380892F00E82AD4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D9A8A03E2380893700E82AD4 /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
-		D9A8A03F2380893700E82AD4 /* PathView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathView.swift; sourceTree = "<group>"; };
 		D9EC453C238B39B7003B0B70 /* 32313766_1988769137862071_3751119703548887040_n.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 32313766_1988769137862071_3751119703548887040_n.jpg; sourceTree = "<group>"; };
 		D9EC453D238B39B7003B0B70 /* 3012666-XDCJOFJE-6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "3012666-XDCJOFJE-6.jpg"; sourceTree = "<group>"; };
 		D9EC453E238B39B7003B0B70 /* oil-painting-underwater-paintings-isabel-emrich-11.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "oil-painting-underwater-paintings-isabel-emrich-11.jpg"; sourceTree = "<group>"; };
@@ -120,15 +118,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		D9099FAC236D4E3000A0BBFB /* 3D Objects */ = {
-			isa = PBXGroup;
-			children = (
-				D9099FAD236D4E3000A0BBFB /* ship.scn */,
-				D9099FAE236D4E3000A0BBFB /* ship.png */,
-			);
-			path = "3D Objects";
-			sourceTree = "<group>";
-		};
 		D9346557236CE89200412F90 = {
 			isa = PBXGroup;
 			children = (
@@ -153,19 +142,19 @@
 		D9346562236CE89200412F90 /* ARAPP */ = {
 			isa = PBXGroup;
 			children = (
-				D9099FAC236D4E3000A0BBFB /* 3D Objects */,
 				D9346563236CE89200412F90 /* AppDelegate.swift */,
 				D9346565236CE89200412F90 /* AppContainer.swift */,
 				D934659C236D260B00412F90 /* CameraViewController.swift */,
 				D9346567236CE89200412F90 /* Main.storyboard */,
-				D9A8A03C2380892F00E82AD4 /* ViewController.swift */,
+				D90FF01F238B541C00E6BAB4 /* CanvasView.swift */,
+				D90FF027238B566F00E6BAB4 /* DrawController.swift */,
+				D90FF021238B541C00E6BAB4 /* Line.swift */,
+				D90FF020238B541C00E6BAB4 /* Words.swift */,
 				D9EC454B238B39E8003B0B70 /* DecodableStructs.swift */,
 				D9EC454C238B39E8003B0B70 /* ExploreViewController.swift */,
 				D9EC454D238B39E8003B0B70 /* posterCell.swift */,
 				D9EC4554238B3E00003B0B70 /* SecondViewController.swift */,
 				D9EC454A238B39E8003B0B70 /* savedPosterCell.swift */,
-				D9A8A03E2380893700E82AD4 /* Path.swift */,
-				D9A8A03F2380893700E82AD4 /* PathView.swift */,
 				D934656A236CE89300412F90 /* Assets.xcassets */,
 				D934656C236CE89300412F90 /* LaunchScreen.storyboard */,
 				D934656F236CE89300412F90 /* Info.plist */,
@@ -285,9 +274,7 @@
 				D934656E236CE89300412F90 /* LaunchScreen.storyboard in Resources */,
 				D9EC4544238B39B8003B0B70 /* 3012666-XDCJOFJE-6.jpg in Resources */,
 				D9EC4547238B39B8003B0B70 /* romantic-walk-home-decor-abstract-oil-painting.jpg in Resources */,
-				D9099FB0236D4E3000A0BBFB /* ship.png in Resources */,
 				D934656B236CE89300412F90 /* Assets.xcassets in Resources */,
-				D9099FAF236D4E3000A0BBFB /* ship.scn in Resources */,
 				D9346569236CE89200412F90 /* Main.storyboard in Resources */,
 				D9EC4549238B39B8003B0B70 /* images.jpg in Resources */,
 			);
@@ -373,14 +360,15 @@
 			files = (
 				D9EC4555238B3E00003B0B70 /* SecondViewController.swift in Sources */,
 				D9EC4551238B39E8003B0B70 /* ExploreViewController.swift in Sources */,
+				D90FF022238B541C00E6BAB4 /* CanvasView.swift in Sources */,
 				D9346566236CE89200412F90 /* AppContainer.swift in Sources */,
 				D9EC454F238B39E8003B0B70 /* savedPosterCell.swift in Sources */,
-				D9A8A0412380893700E82AD4 /* PathView.swift in Sources */,
+				D90FF024238B541C00E6BAB4 /* Line.swift in Sources */,
 				D9346564236CE89200412F90 /* AppDelegate.swift in Sources */,
 				D9EC4550238B39E8003B0B70 /* DecodableStructs.swift in Sources */,
 				D9EC4552238B39E8003B0B70 /* posterCell.swift in Sources */,
-				D9A8A03D2380892F00E82AD4 /* ViewController.swift in Sources */,
-				D9A8A0402380893700E82AD4 /* Path.swift in Sources */,
+				D90FF028238B566F00E6BAB4 /* DrawController.swift in Sources */,
+				D90FF023238B541C00E6BAB4 /* Words.swift in Sources */,
 				D934659D236D260B00412F90 /* CameraViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
