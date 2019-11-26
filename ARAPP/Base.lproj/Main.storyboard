@@ -212,8 +212,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gf1-Xw-7b7">
                                 <rect key="frame" x="20" y="0.0" width="374" height="896"/>
                                 <subviews>
-                                    <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQC-pE-xAG">
+                                    <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WQC-pE-xAG">
                                         <rect key="frame" x="-20" y="0.0" width="414" height="896"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </arscnView>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="nb4-KB-cZj">
                                         <rect key="frame" x="166" y="424" width="42" height="20"/>
@@ -257,19 +258,15 @@
                                 <constraints>
                                     <constraint firstItem="4xu-b8-5iq" firstAttribute="top" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="64" id="75E-3y-Xff"/>
                                     <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Ec8-oU-RHs" secondAttribute="trailing" constant="85" id="8sm-Jx-JpT"/>
-                                    <constraint firstItem="WQC-pE-xAG" firstAttribute="top" secondItem="Gf1-Xw-7b7" secondAttribute="top" id="9G9-hH-amM"/>
                                     <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="4xu-b8-5iq" secondAttribute="trailing" constant="85" id="D97-EM-FtD"/>
                                     <constraint firstAttribute="bottom" secondItem="nb4-KB-cZj" secondAttribute="bottom" constant="452" id="JOq-Z1-4wU"/>
                                     <constraint firstItem="Bqt-dw-Ued" firstAttribute="top" secondItem="hGg-Rh-X7Q" secondAttribute="bottom" constant="8" id="Jom-Kc-lIN"/>
-                                    <constraint firstAttribute="trailing" secondItem="WQC-pE-xAG" secondAttribute="trailing" constant="-20" id="K20-Wl-vud"/>
                                     <constraint firstItem="Ec8-oU-RHs" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="85" id="Psv-Rj-74B"/>
                                     <constraint firstItem="4xu-b8-5iq" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="85" id="Sud-PB-cxa"/>
                                     <constraint firstItem="Bqt-dw-Ued" firstAttribute="leading" secondItem="hGg-Rh-X7Q" secondAttribute="leading" id="UYG-BS-Pgq"/>
                                     <constraint firstItem="nb4-KB-cZj" firstAttribute="top" secondItem="Ec8-oU-RHs" secondAttribute="bottom" constant="8" id="a1M-v2-9VH"/>
                                     <constraint firstItem="Bqt-dw-Ued" firstAttribute="trailing" secondItem="hGg-Rh-X7Q" secondAttribute="trailing" id="c20-tw-oKq"/>
-                                    <constraint firstAttribute="bottom" secondItem="WQC-pE-xAG" secondAttribute="bottom" id="cJS-Ew-APx"/>
                                     <constraint firstItem="nb4-KB-cZj" firstAttribute="top" secondItem="Ec8-oU-RHs" secondAttribute="bottom" constant="8" id="ckg-Ep-Igs"/>
-                                    <constraint firstItem="WQC-pE-xAG" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" constant="-20" id="cqm-1m-5J9"/>
                                     <constraint firstItem="hGg-Rh-X7Q" firstAttribute="leading" secondItem="Gf1-Xw-7b7" secondAttribute="leading" id="f2P-KN-ElJ"/>
                                     <constraint firstItem="Ec8-oU-RHs" firstAttribute="top" secondItem="Gf1-Xw-7b7" secondAttribute="top" constant="383" id="jcX-sX-rdO"/>
                                     <constraint firstAttribute="trailing" secondItem="nb4-KB-cZj" secondAttribute="trailing" constant="166" id="q0f-0r-WHC"/>
@@ -285,6 +282,16 @@
                                 </state>
                                 <connections>
                                     <action selector="didDeleteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5SM-7L-OPu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yAr-NM-guJ">
+                                <rect key="frame" x="271" y="753" width="123" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reset Size">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetSize:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D43-PI-MNc"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfV-e1-cjN">
@@ -334,6 +341,7 @@
                         <outlet property="lengthLabel" destination="Bqt-dw-Ued" id="AGM-vn-F4r"/>
                         <outlet property="makeVertical" destination="p3X-64-epc" id="VQ8-fD-yli"/>
                         <outlet property="numPlanesButton" destination="wfV-e1-cjN" id="thv-MX-AkZ"/>
+                        <outlet property="resetSize" destination="yAr-NM-guJ" id="0su-sX-qkO"/>
                         <outlet property="sceneView" destination="WQC-pE-xAG" id="PTO-Xf-2S0"/>
                         <outlet property="widthLabel" destination="hGg-Rh-X7Q" id="A6D-Ud-HrT"/>
                     </connections>

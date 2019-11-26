@@ -25,6 +25,10 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     @IBOutlet weak var invalidPlaneLabel: UILabel!
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
+    @IBOutlet weak var resetSize: UIButton!
+    
+    
+
     
     // MARK: ACTIONS
     // ==============================================================
@@ -42,8 +46,25 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         selectedPoster = -1
         deleteButton.isHidden = true
         makeVertical.isHidden = true
+        resetSize.isHidden = true
         widthLabel.isHidden = true
         lengthLabel.isHidden = true
+        
+    }
+    
+    @IBAction func resetSize(_ sender: Any) {
+        guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
+        let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+        selectedNode.scale = SCNVector3Make(1,1,1)
+        
+   
+        
+        let nodeWidth = (selectedNode.boundingBox.max.x - selectedNode.boundingBox.min.x) * 100 * selectedNode.scale.x
+        let nodeWidthRounded = String(format: "%.1f", nodeWidth)
+        let nodeLength = (selectedNode.boundingBox.max.y - selectedNode.boundingBox.min.y) * 100 * selectedNode.scale.y
+        let lengthWidthRounded = String(format: "%.1f", nodeLength)
+        widthLabel.text = "Width: \(nodeWidthRounded)"
+        lengthLabel.text = "Length: \(lengthWidthRounded)"
         
     }
     @IBAction func makeVertical(_ sender: Any) {
@@ -51,6 +72,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
         let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
         selectedNode.eulerAngles = posterAnglesArray[selectedPoster]
+        
     }
     @IBAction func numPlanesAction(_ sender: Any) {
         
@@ -131,6 +153,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         makeVertical.layer.borderWidth = 1
         makeVertical.layer.borderColor = UIColor.black.cgColor
         makeVertical.isHidden = true
+        
+        resetSize.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        resetSize.layer.cornerRadius = 5
+        resetSize.layer.borderWidth = 1
+        resetSize.layer.borderColor = UIColor.black.cgColor
+        resetSize.isHidden = true
         
         deleteButton.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         deleteButton.layer.cornerRadius = 5
@@ -425,6 +453,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             // Show delete button.
                             deleteButton.isHidden = false
                             makeVertical.isHidden = false
+                            resetSize.isHidden = false
                             widthLabel.isHidden = false
                             lengthLabel.isHidden = false
                             
@@ -529,6 +558,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     // Hide delete button.
                     deleteButton.isHidden = true
                     makeVertical.isHidden = true
+                    resetSize.isHidden = true
                     widthLabel.isHidden = true
                     lengthLabel.isHidden = true
                     
