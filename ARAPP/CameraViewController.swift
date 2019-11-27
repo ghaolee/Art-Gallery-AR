@@ -26,6 +26,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     @IBOutlet weak var widthLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
     @IBOutlet weak var resetSize: UIButton!
+    @IBOutlet weak var clearPosters: UIButton!
     
     
 
@@ -41,7 +42,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         posterImageNameArray.remove(at: selectedPoster)
         selectedPosterNode.removeFromParentNode()
         posterAnglesArray.remove(at: selectedPoster)
-        
+        if posterNodeRefereneces.count == 0 {
+                   clearPosters.isHidden = true
+               }
+               else {
+                   clearPosters.isHidden = false
+               }
         // Take care of deselect nodes.
         selectedPoster = -1
         deleteButton.isHidden = true
@@ -50,7 +56,27 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         widthLabel.isHidden = true
         lengthLabel.isHidden = true
         
+        
     }
+    
+    @IBAction func clearPosters(_ sender: Any) {
+        while posterNodeRefereneces.count > 0 {
+                  let pointer = posterNodeRefereneces.pointer(at: 0)
+                  let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer!).takeUnretainedValue()
+                         posterNodeRefereneces.removePointer(at: 0)
+                         posterImageNameArray.remove(at: 0)
+                         selectedPosterNode.removeFromParentNode()
+                         posterAnglesArray.remove(at: 0)
+              }
+              selectedPoster = -1
+              deleteButton.isHidden = true
+              makeVertical.isHidden = true
+              resetSize.isHidden = true
+              widthLabel.isHidden = true
+              lengthLabel.isHidden = true
+              clearPosters.isHidden = true
+    }
+    
     
     @IBAction func resetSize(_ sender: Any) {
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
@@ -114,7 +140,6 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     var hasDetectedPlane: Bool = false //
     var numPlanesDetected: Int = 0
     var showingInvalid: Bool = false
-    
     // MARK: FUNCTIONS
     // ==============================================================
     
@@ -165,6 +190,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         deleteButton.layer.borderWidth = 1
         deleteButton.layer.borderColor = UIColor.black.cgColor
         deleteButton.isHidden = true
+        
+        clearPosters.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        clearPosters.layer.cornerRadius = 5
+        clearPosters.layer.borderWidth = 1
+        clearPosters.layer.borderColor = UIColor.black.cgColor
+        clearPosters.isHidden = true
         
         invalidPlaneLabel.layer.backgroundColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         invalidPlaneLabel.layer.cornerRadius = 5
@@ -533,6 +564,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                 
                 // If we tap something that's not a poster, deselect any
                 // selected posters. Otherwise, create a poster.
+                
                 if (selectedPoster != -1) {
                     
                     // Update material for old object.
@@ -562,6 +594,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     // Unselect posters.
                     selectedPoster = -1
                 } else {
+                    
                     let hitList = sceneView.hitTest(location,
                     types: .existingPlaneUsingGeometry)
                     
@@ -632,6 +665,12 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
         default:
             print("tapped default")
         }
+        if posterNodeRefereneces.count == 0 {
+                   clearPosters.isHidden = true
+               }
+               else {
+                   clearPosters.isHidden = false
+               }
     }
     
 }
