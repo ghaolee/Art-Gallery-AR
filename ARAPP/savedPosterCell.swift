@@ -10,5 +10,7 @@ import UIKit
 
 class savedPosterCell: UICollectionViewCell {
     
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var selectImage: UIButton!
     @IBOutlet weak var savedImageView: UIImageView!
 }

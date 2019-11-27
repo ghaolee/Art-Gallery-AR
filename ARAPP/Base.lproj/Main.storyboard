@@ -46,17 +46,44 @@
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bMa-nu-6Gc">
                                                             <rect key="frame" x="0.0" y="0.0" width="143" height="173"/>
                                                         </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ety-zn-WB5">
+                                                            <rect key="frame" x="0.0" y="0.0" width="143" height="173"/>
+                                                        </button>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="redx" translatesAutoresizingMaskIntoConstraints="NO" id="S73-ZZ-78M">
+                                                            <rect key="frame" x="123" y="0.0" width="20" height="20"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="20" id="UUn-fF-lF2"/>
+                                                                <constraint firstAttribute="width" constant="20" id="mGf-jd-KpS"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8rV-Jg-zmx">
+                                                            <rect key="frame" x="123" y="0.0" width="20" height="20"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="20" id="ZOg-HC-vC3"/>
+                                                                <constraint firstAttribute="width" constant="20" id="zml-Vs-auV"/>
+                                                            </constraints>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="Ety-zn-WB5" secondAttribute="trailing" id="0TS-bY-yQE"/>
+                                                        <constraint firstItem="Ety-zn-WB5" firstAttribute="leading" secondItem="n4g-ND-KMg" secondAttribute="leading" id="17P-WQ-xeQ"/>
+                                                        <constraint firstItem="S73-ZZ-78M" firstAttribute="top" secondItem="n4g-ND-KMg" secondAttribute="top" id="6T2-5k-z6F"/>
+                                                        <constraint firstAttribute="trailing" secondItem="S73-ZZ-78M" secondAttribute="trailing" id="AAn-Cw-UC8"/>
                                                         <constraint firstItem="bMa-nu-6Gc" firstAttribute="top" secondItem="n4g-ND-KMg" secondAttribute="top" id="CfU-ap-wU0"/>
                                                         <constraint firstAttribute="bottom" secondItem="bMa-nu-6Gc" secondAttribute="bottom" id="HHo-Tk-5Px"/>
+                                                        <constraint firstItem="8rV-Jg-zmx" firstAttribute="top" secondItem="n4g-ND-KMg" secondAttribute="top" id="PKK-oy-HHj"/>
+                                                        <constraint firstAttribute="trailing" secondItem="8rV-Jg-zmx" secondAttribute="trailing" id="Tu2-pI-lab"/>
+                                                        <constraint firstItem="Ety-zn-WB5" firstAttribute="top" secondItem="n4g-ND-KMg" secondAttribute="top" id="c3s-GG-x9S"/>
                                                         <constraint firstItem="bMa-nu-6Gc" firstAttribute="leading" secondItem="n4g-ND-KMg" secondAttribute="leading" id="fBk-ao-pgg"/>
                                                         <constraint firstAttribute="trailing" secondItem="bMa-nu-6Gc" secondAttribute="trailing" id="qkr-jI-rnG"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Ety-zn-WB5" secondAttribute="bottom" id="w4s-OD-exu"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <size key="customSize" width="143" height="173"/>
                                                 <connections>
+                                                    <outlet property="deleteButton" destination="8rV-Jg-zmx" id="WUZ-gc-1kR"/>
                                                     <outlet property="savedImageView" destination="bMa-nu-6Gc" id="nEj-uD-IyW"/>
+                                                    <outlet property="selectImage" destination="Ety-zn-WB5" id="NHp-F6-xmz"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -113,6 +140,10 @@
                                         <rect key="frame" x="0.0" y="44" width="414" height="56"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </searchBar>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="M2m-bE-FqZ">
+                                        <rect key="frame" x="0.0" y="100" width="414" height="619"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ub6-ex-KqS">
                                         <rect key="frame" x="0.0" y="100" width="414" height="669"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -133,16 +164,24 @@
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kDo-XZ-DaA">
                                                             <rect key="frame" x="0.0" y="0.0" width="134" height="191"/>
                                                         </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="98d-XL-8bT">
+                                                            <rect key="frame" x="0.0" y="0.0" width="134" height="191"/>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="kDo-XZ-DaA" secondAttribute="trailing" id="3NQ-J0-Cu1"/>
+                                                        <constraint firstAttribute="bottom" secondItem="98d-XL-8bT" secondAttribute="bottom" id="EhS-cs-pvK"/>
                                                         <constraint firstItem="kDo-XZ-DaA" firstAttribute="leading" secondItem="kiy-VH-0GM" secondAttribute="leading" id="Q9g-Uv-tgu"/>
+                                                        <constraint firstAttribute="trailing" secondItem="98d-XL-8bT" secondAttribute="trailing" id="WdK-At-fgV"/>
                                                         <constraint firstItem="kDo-XZ-DaA" firstAttribute="top" secondItem="kiy-VH-0GM" secondAttribute="top" id="ios-dn-Rtg"/>
+                                                        <constraint firstItem="98d-XL-8bT" firstAttribute="top" secondItem="kiy-VH-0GM" secondAttribute="top" id="kuZ-5A-kmm"/>
+                                                        <constraint firstItem="98d-XL-8bT" firstAttribute="leading" secondItem="kiy-VH-0GM" secondAttribute="leading" id="qt9-dk-IlD"/>
                                                         <constraint firstAttribute="bottom" secondItem="kDo-XZ-DaA" secondAttribute="bottom" id="wsp-DV-G5Z"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <size key="customSize" width="134" height="191"/>
                                                 <connections>
+                                                    <outlet property="posterButton" destination="98d-XL-8bT" id="N7C-sq-B6R"/>
                                                     <outlet property="posterImageView" destination="kDo-XZ-DaA" id="U85-jA-CQD"/>
                                                 </connections>
                                             </collectionViewCell>
@@ -175,13 +214,14 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Explore" id="c71-8Z-ln2"/>
                     <connections>
+                        <outlet property="activityWheel" destination="M2m-bE-FqZ" id="Xrt-W7-64z"/>
                         <outlet property="exploreSearchBar" destination="am2-lD-Bf8" id="yl9-Gx-5MC"/>
                         <outlet property="theCollectionView" destination="ub6-ex-KqS" id="BLc-8a-Vfj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Se-Ej-aXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-974" y="844"/>
+            <point key="canvasLocation" x="-975.36231884057975" y="843.75"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="N2O-U9-NFi">
@@ -542,6 +582,7 @@
         <image name="eye.fill" catalog="system" width="64" height="38"/>
         <image name="paintbrush.fill" catalog="system" width="64" height="62"/>
         <image name="pencil.tip" catalog="system" width="48" height="64"/>
+        <image name="redx" width="1024" height="1024"/>
         <image name="square.and.arrow.down.fill" catalog="system" width="60" height="64"/>
         <image name="trash.fill" catalog="system" width="60" height="64"/>
     </resources>

@@ -463,14 +463,11 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                                 let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                                 let unhighlightMat = SCNMaterial()
                                 
-                                if (posterImageNameArray[selectedPoster] != "arewecool") {
-                                    if let data = UserDefaults.standard.data(forKey: posterImageNameArray[selectedPoster]), let image = UIImage(data: data) {
-                                        unhighlightMat.diffuse.contents = image
-                                    }  else {
-                                        unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
-                                    }
-                                } else {
+                                if (posterImageNameArray[selectedPoster] == "noImage") {
                                     unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                } else {
+                                    let selectedImage = UIImage(contentsOfFile: posterImageNameArray[selectedPoster])
+                                    unhighlightMat.diffuse.contents = selectedImage
                                 }
                                 
                                 unhighlightMat.isDoubleSided = true
@@ -480,14 +477,13 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             // Update material for newly selected object.
                             let highlightMat = SCNMaterial()
                             
-                            if (posterImageNameArray[n] != "arewecool") {
-                                if let data = UserDefaults.standard.data(forKey: posterImageNameArray[n]), let image = UIImage(data: data) {
-                                    highlightMat.diffuse.contents = image
-                                }  else {
-                                    highlightMat.diffuse.contents = UIImage(named: "arewecool")
-                                }
-                            } else {
+                            
+                            
+                            if (posterImageNameArray[n] == "noImage") {
                                 highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                            } else {
+                                let selectedImage = UIImage(contentsOfFile: posterImageNameArray[n])
+                                highlightMat.diffuse.contents = selectedImage
                             }
                             
                             highlightMat.isDoubleSided = true
@@ -543,15 +539,16 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     guard selectedPoster < posterNodeRefereneces.count, let oldPointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
                     let oldHit = Unmanaged<SCNNode>.fromOpaque(oldPointer).takeUnretainedValue()
                     let unhighlightMat = SCNMaterial()
-                    if (posterImageNameArray[selectedPoster] != "arewecool") {
-                        if let data = UserDefaults.standard.data(forKey: posterImageNameArray[selectedPoster]), let image = UIImage(data: data) {
-                            unhighlightMat.diffuse.contents = image
-                        }  else {
-                            unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
-                        }
-                    } else {
+                    
+                    
+                    if (posterImageNameArray[selectedPoster] == "noImage") {
                         unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                    } else {
+                        let selectedImage = UIImage(contentsOfFile: posterImageNameArray[selectedPoster])
+                        unhighlightMat.diffuse.contents = selectedImage
                     }
+                    
+                
                     unhighlightMat.isDoubleSided = true
                     oldHit.geometry?.materials[0] = unhighlightMat
                     
@@ -573,7 +570,8 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                         var posterGeo = SCNPlane(width: 0.05, height: 0.1)
                         let posterMat = SCNMaterial()
                         
-                        if let data = UserDefaults.standard.data(forKey: "drawings"), let image = UIImage(data: data) {
+                        
+                        if let data = UserDefaults.standard.string(forKey: "SelectedImage"), let image = UIImage(contentsOfFile: data) {
                             
                             let multFactor = image.size.height / 10
                             let widthMulted = image.size.width / multFactor
@@ -582,11 +580,18 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             print(widthMulted)
                             
                             posterMat.diffuse.contents = image
-                            posterImageNameArray.append("drawings")
+                            
+                            if let selectedImagePath = UserDefaults.standard.string(forKey: "SelectedImage") {
+                                posterImageNameArray.append(selectedImagePath)
+                            } else {
+                                posterImageNameArray.append("noImage")
+                            }
                         } else {
-                            posterMat.diffuse.contents = UIImage(named: "arewecool")
-                            posterImageNameArray.append("arewecool")
+                            // no image selected
+                            print("no image selected")
                         }
+                        
+                        
                         posterMat.isDoubleSided = true
                         posterGeo.materials = [posterMat]
                         

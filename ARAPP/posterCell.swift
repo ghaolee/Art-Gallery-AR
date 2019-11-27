@@ -9,6 +9,7 @@
 import UIKit
 
 class posterCell: UICollectionViewCell {
-    
+        
+    @IBOutlet weak var posterButton: UIButton!
     @IBOutlet weak var posterImageView: UIImageView!
 }

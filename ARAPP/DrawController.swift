@@ -106,7 +106,21 @@ class DrawController: UIViewController {
                 self.myCanvas.drawHierarchy(in: self.myCanvas.bounds, afterScreenUpdates: true)
             }
             if let data = image.pngData() {
-                UserDefaults.standard.set(data, forKey: "drawings")
+                let image = UIImage(data: data)
+                var counter = UserDefaults.standard.integer(forKey: "imageNameCounter")
+                counter += 1
+                let paths = URL(fileURLWithPath: NSHomeDirectory())
+                let fileName = "/Documents/PosterImages/\(counter).png"
+                let filePath = paths.appendingPathComponent(fileName)
+                UserDefaults.standard.set(counter, forKey: "imageNameCounter")
+                do {
+                    try image!.pngData()?.write(to: filePath, options: .atomic)
+                    print("SUCCESS:", filePath)
+                }
+                catch let error{
+                    print(error)
+                }
+                // UserDefaults.standard.set(data, forKey: "drawings")
             }
         }))
         self.present(saveAlert, animated: true, completion: nil)

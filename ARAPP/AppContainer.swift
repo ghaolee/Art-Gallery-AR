@@ -21,6 +21,7 @@ class AppContainer: UIViewController, UIScrollViewDelegate {
         return container
     }
     
+    var savedVC = SecondViewController()
     var leftVC: UIViewController!
     var middleVC: UIViewController!
     var rightVC: UIViewController!
@@ -33,6 +34,10 @@ class AppContainer: UIViewController, UIScrollViewDelegate {
         UIApplication.shared.isIdleTimerDisabled = true
         setupHorizontalScrollView()
         
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        NotificationCenter.default.post(name: .didReceiveData, object: nil)
     }
 
     func setupHorizontalScrollView() {
