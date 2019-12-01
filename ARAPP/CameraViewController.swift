@@ -629,15 +629,18 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             let widthMulted = image.size.width / multFactor
                             
                             posterGeo = SCNPlane(width: widthMulted / 100, height: 0.1)
-                            print(widthMulted)
                             
                             posterMat.diffuse.contents = image
                             posterImageNameArray.append(data)
                         } else {
-                            posterMat.diffuse.contents = UIImage(named: "noImage")
+                            
+                            let image = UIImage(named: "noImage")
+                            let multFactor = image!.size.height / 10
+                            let widthMulted = image!.size.width / multFactor
+                            posterGeo = SCNPlane(width: widthMulted / 100, height: 0.1)
+                            posterMat.diffuse.contents = image
                             posterImageNameArray.append("noImage")
                         }
-                        
                         
                         posterMat.isDoubleSided = true
                         posterGeo.materials = [posterMat]
