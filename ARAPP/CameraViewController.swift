@@ -6,7 +6,6 @@
 //  Copyright © 2019 Zhi Shen Yong. All rights reserved.
 //
 
-
 import UIKit
 import SceneKit
 import ARKit
@@ -16,7 +15,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     // MARK: OUTLETS
     // ==============================================================
     
-    @IBOutlet weak var sceneView: ARSCNView! // The main AR camera view.
+    @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var makeVertical: UIButton!
     @IBOutlet weak var findingPlaneLabel: UILabel!
@@ -28,78 +27,98 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
     @IBOutlet weak var resetSize: UIButton!
     @IBOutlet weak var clearPosters: UIButton!
     
-    
-
-    
     // MARK: ACTIONS
     // ==============================================================
+    
+    // Deletes the currently selected poster.
     @IBAction func didDeleteButton(_ sender: Any) {
-        // Remove the node.
-        //  removePointer() automatically fixes the NSPointerArray count.
+        
+        // Get the selected poster as a node from the node references array.
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else { return }
         let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+        
+        // Remove the reference to the node and delete the path to the poster's image.
         posterNodeRefereneces.removePointer(at: selectedPoster)
         posterImageNameArray.remove(at: selectedPoster)
+        
+        // Delete the poster from its parent node and remove its angle information.
         selectedPosterNode.removeFromParentNode()
         posterAnglesArray.remove(at: selectedPoster)
-        if posterNodeRefereneces.count == 0 {
-                   clearPosters.isHidden = true
-               }
-               else {
-                   clearPosters.isHidden = false
-               }
-        // Take care of deselect nodes.
+        
+        // Check if there are any posters left.
+        if (posterNodeRefereneces.count) == 0 {
+           clearPosters.isHidden = true
+        } else {
+           clearPosters.isHidden = false
+        }
+        
+        // Hide other buttons.
         selectedPoster = -1
         deleteButton.isHidden = true
         makeVertical.isHidden = true
         resetSize.isHidden = true
         widthLabel.isHidden = true
         lengthLabel.isHidden = true
-        
-        
     }
     
+    // Deletes all posters that have been placed.
     @IBAction func clearPosters(_ sender: Any) {
+        
+        // Iterate through all placed posters.
         while posterNodeRefereneces.count > 0 {
-                  let pointer = posterNodeRefereneces.pointer(at: 0)
-                  let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer!).takeUnretainedValue()
-                         posterNodeRefereneces.removePointer(at: 0)
-                         posterImageNameArray.remove(at: 0)
-                         selectedPosterNode.removeFromParentNode()
-                         posterAnglesArray.remove(at: 0)
-              }
-              selectedPoster = -1
-              deleteButton.isHidden = true
-              makeVertical.isHidden = true
-              resetSize.isHidden = true
-              widthLabel.isHidden = true
-              lengthLabel.isHidden = true
-              clearPosters.isHidden = true
+            
+            // Get the poster node from the poster references array.
+            let pointer = posterNodeRefereneces.pointer(at: 0)
+            let selectedPosterNode = Unmanaged<SCNNode>.fromOpaque(pointer!).takeUnretainedValue()
+            
+            // Remove the node from all tracking arrays.
+            posterNodeRefereneces.removePointer(at: 0)
+            posterImageNameArray.remove(at: 0)
+            selectedPosterNode.removeFromParentNode()
+            posterAnglesArray.remove(at: 0)
+        }
+        
+        // Hide all buttons.
+        selectedPoster = -1
+        deleteButton.isHidden = true
+        makeVertical.isHidden = true
+        resetSize.isHidden = true
+        widthLabel.isHidden = true
+        lengthLabel.isHidden = true
+        clearPosters.isHidden = true
     }
     
-    
+    // Resets the size of a selected poster.
     @IBAction func resetSize(_ sender: Any) {
+        
+        // Get the currently selected poster from the node references array.
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
         let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
+        
+        // Set the scale of the poster to 1.
         selectedNode.scale = SCNVector3Make(1,1,1)
         
-   
-        
+        // Update the width and length text.
         let nodeWidth = (selectedNode.boundingBox.max.x - selectedNode.boundingBox.min.x) * 100 * selectedNode.scale.x
         let nodeWidthRounded = String(format: "%.1f", nodeWidth)
         let nodeLength = (selectedNode.boundingBox.max.y - selectedNode.boundingBox.min.y) * 100 * selectedNode.scale.y
         let lengthWidthRounded = String(format: "%.1f", nodeLength)
         widthLabel.text = "Width: \(nodeWidthRounded)"
         lengthLabel.text = "Length: \(lengthWidthRounded)"
-        
     }
+    
+    // Reset the orientation of the poster to vertical.
     @IBAction func makeVertical(_ sender: Any) {
-        // commit testing
+        
+        // Get the currently selected poster from the node references array.
         guard selectedPoster < posterNodeRefereneces.count, let pointer = posterNodeRefereneces.pointer(at: selectedPoster) else {return}
         let selectedNode = Unmanaged<SCNNode>.fromOpaque(pointer).takeUnretainedValue()
-        selectedNode.eulerAngles = posterAnglesArray[selectedPoster]
         
+        // Reset its eulerAngle to what it was at the start.
+        selectedNode.eulerAngles = posterAnglesArray[selectedPoster]
     }
+    
+    
     @IBAction func numPlanesAction(_ sender: Any) {
         
         for n in 0 ..< planeNodeReferences.count {

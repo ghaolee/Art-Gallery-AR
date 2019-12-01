@@ -52,7 +52,7 @@
 		D90FF020238B541C00E6BAB4 /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
 		D90FF021238B541C00E6BAB4 /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		D90FF027238B566F00E6BAB4 /* DrawController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawController.swift; sourceTree = "<group>"; };
-		D9346560236CE89200412F90 /* ARAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9346560236CE89200412F90 /* PosterWise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PosterWise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9346563236CE89200412F90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9346565236CE89200412F90 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		D9346568236CE89200412F90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		D9346561236CE89200412F90 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D9346560236CE89200412F90 /* ARAPP.app */,
+				D9346560236CE89200412F90 /* PosterWise.app */,
 				D9346574236CE89300412F90 /* ARAPPTests.xctest */,
 			);
 			name = Products;
@@ -203,7 +203,7 @@
 			);
 			name = ARAPP;
 			productName = ARAPP;
-			productReference = D9346560236CE89200412F90 /* ARAPP.app */;
+			productReference = D9346560236CE89200412F90 /* PosterWise.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D9346573236CE89300412F90 /* ARAPPTests */ = {
@@ -540,7 +540,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = zhishen.yong;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = PosterWise;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -559,7 +559,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = zhishen.yong;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = PosterWise;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

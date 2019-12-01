@@ -51,7 +51,7 @@ class ExploreViewController: UIViewController, UICollectionViewDataSource, UICol
             self.saveImage(index: index)
         }))
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: nil))
-        let imageView = UIImageView(frame: CGRect(x: 10, y: 50, width: 220, height: 220))
+        let imageView = UIImageView(frame: CGRect(x: 25, y: 50, width: 220, height: 220))
         let height = NSLayoutConstraint(item: alert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 320)
         alert.view.addConstraint(height)
         if (sender.tag >= posterImages.count) {
@@ -79,7 +79,6 @@ class ExploreViewController: UIViewController, UICollectionViewDataSource, UICol
     
     func createDir() {
         let filePath = NSHomeDirectory() + "/Documents/PosterImages"
-        print(filePath)
         do {
             try FileManager.default.createDirectory(atPath: filePath, withIntermediateDirectories: true, attributes: nil)
         } catch let error {
@@ -159,7 +158,6 @@ class ExploreViewController: UIViewController, UICollectionViewDataSource, UICol
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("HI")
         let searchBarText = self.exploreSearchBar.text!
         if (searchBarText != "") {
             let vc = self

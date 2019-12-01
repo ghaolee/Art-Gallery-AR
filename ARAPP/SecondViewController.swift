@@ -50,7 +50,7 @@ class SecondViewController: UIViewController, UICollectionViewDataSource, UIColl
     @objc func selectImageAlert(sender: UIButton) {
         let alert = UIAlertController(title: title, message: "Selected Image:", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: nil))
-        let imageView = UIImageView(frame: CGRect(x: 10, y: 50, width: 220, height: 220))
+        let imageView = UIImageView(frame: CGRect(x: 25, y: 50, width: 220, height: 220))
         let height = NSLayoutConstraint(item: alert.view!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 320)
         alert.view.addConstraint(height)
         imageView.image = savedPosters[sender.tag]
