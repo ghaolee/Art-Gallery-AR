@@ -495,7 +495,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                                 let unhighlightMat = SCNMaterial()
                                 
                                 if (posterImageNameArray[selectedPoster] == "noImage") {
-                                    unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                    unhighlightMat.diffuse.contents = UIImage(named: "noImage")
                                 } else {
                                     let selectedImage = UIImage(contentsOfFile: posterImageNameArray[selectedPoster])
                                     unhighlightMat.diffuse.contents = selectedImage
@@ -511,7 +511,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             
                             
                             if (posterImageNameArray[n] == "noImage") {
-                                highlightMat.diffuse.contents = UIImage(named: "arewecool")
+                                highlightMat.diffuse.contents = UIImage(named: "noImage")
                             } else {
                                 let selectedImage = UIImage(contentsOfFile: posterImageNameArray[n])
                                 highlightMat.diffuse.contents = selectedImage
@@ -574,7 +574,7 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                     
                     
                     if (posterImageNameArray[selectedPoster] == "noImage") {
-                        unhighlightMat.diffuse.contents = UIImage(named: "arewecool")
+                        unhighlightMat.diffuse.contents = UIImage(named: "noImage")
                     } else {
                         let selectedImage = UIImage(contentsOfFile: posterImageNameArray[selectedPoster])
                         unhighlightMat.diffuse.contents = selectedImage
@@ -613,15 +613,10 @@ class CameraViewController: UIViewController, ARSCNViewDelegate, ARSessionDelega
                             print(widthMulted)
                             
                             posterMat.diffuse.contents = image
-                            
-                            if let selectedImagePath = UserDefaults.standard.string(forKey: "SelectedImage") {
-                                posterImageNameArray.append(selectedImagePath)
-                            } else {
-                                posterImageNameArray.append("noImage")
-                            }
+                            posterImageNameArray.append(data)
                         } else {
-                            // no image selected
-                            print("no image selected")
+                            posterMat.diffuse.contents = UIImage(named: "noImage")
+                            posterImageNameArray.append("noImage")
                         }
                         
                         
